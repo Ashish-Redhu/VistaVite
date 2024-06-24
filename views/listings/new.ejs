@@ -1,0 +1,59 @@
+<% layout("../layouts/boilerplate") %>
+<body>
+  <div class="row">
+    <!-- We created a row, which contains a single element, single column. -->
+    <!-- Total 12-columns are there and we want to give 8 to it. -->
+    <!-- offset-2, means we want to give spacing from left side. -->
+    <div class="col-8 offset-2">
+    <h1 style="margin-top: 2rem;">Create a new Listing</h1>
+    <form action="/listings/new" method="POST" style="margin-top: 2rem;">
+        <div class="form-group mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="x[title]" id="title" placeholder="enter title here" class="form-control">
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="x[description]" id="description" placeholder="enter some description" class="form-control"></textarea>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="image" class="form-label">Image URL</label>
+            <input type="text" name="x[image]" id="image" placeholder="image-url" class="form-control">
+        </div>
+
+
+        <!-- To keep price and country in same line. -->
+        <div class="row">
+            <div class="form-group mb-3 col-md-4">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" name="x[price]" id="price" placeholder="price here" class="form-control">
+            </div>
+    
+            <div class="form-group mb-3 col-md-8">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" name="x[country]" id="country" placeholder="country here" class="form-control">
+            </div>
+        </div>
+        
+        
+        <div class="form-group mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="x[location]" id="location" placeholder="location here" class="form-control">
+        </div>
+       
+        <br>
+        <button class="btn btn-dark">Submit</button>
+
+    </form>
+    <br>
+    </div>
+
+  </div>
+</body>
+
+<!-- See row and column is an amazing thing to adjust things using Bootstrap. -->
+<!-- Row means we are creating a single row, if number of items increase and you want to create multiple rows, you have to mention that, no of columns you want to keep you have to mention that simple. -->
+
+
+

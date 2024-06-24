@@ -1,0 +1,106 @@
+Here we are building a travel booking website (VistaVite).
+
+Remember always start building from the backend part first.
+
+// PART-1:
+
+So, here I have "app.js" (our main backend server file). 
+"models" folder (a directory to contain all the models/collection/schemas). Because we will be creating lot of schemas so it is a good thing to put them in a seperate folder and require them in any of the file whereever needed and then create a single or multiple objects/documents and then insert in db or perform any other operation.
+"public" folder (a directory to contain static files). Means the files whose content will not change with user interaction.
+"views" folder (a directory to contain views/ejs files). These are the ejs/express files whose code will render when we go to diff-diff links/routes.
+EJS: Embedded JavaScript, we are writing JS inside HTML, extension of file .ejs
+"init" folder (a directory to that contains some data to initialize our database means so that we can insert some data in our database on the starting basis).
+
+
+// listing.js: This is a file which will make schema and then assign that schema to a collection. Listing of all hotels.
+Here no need to make a connection with database, because here we are simply making a new Schema(structure for a particular collection) and assigning that schema to a particular collection and then exporting that collection/model. Here we are not inserting anything in database or any other CRUD operation. We will importing this model/collection inside some other JS file where we have already build connection with mongoDB with the help of mongoose and there we will perform CRUD operations. We are importing mongoose so that we can define a schema. You know mongoose have two work (i) making connection of backend.js file with mongodb and (ii) defining schema.
+
+// We are inserting multiple data in our database with the help of "init" folder, data resides in "data.js" and inserted using "index.js"
+
+// Views >> listings 
+index.ejs a view to contain a list of all the villa/apartments/hotels. When we click on any of them it will show us more details about that redirect to other page. 
+
+listing.price.toLocaleString('en-IN'); To add commans to the numbers on the basis of country.
+
+
+// Till Now: We have simple inserted some data in database using "init" folder, render that data using "view/listings" index.ejs and then a particular data in detail using "show.ejs"
+Now:
+
+Add new Listing button ---
+We are going to add a button on "index.js" where all the listings are available, to add a new listing.
+Procedure:
+Click on New listing button >> Get request send and A form render >> click submit button of form >> Post request send, data added to listing collection of wanderlust, page redirected to index.ejs
+
+Update a Listing button with each listing itself ---
+Procedure:
+A button added with each listing/hotel >> click on edit button, a get request sent >> a form open containing already existing details >> submit form, update/put request sent >> update the things and redirect. 
+method-override is require to make put request.
+
+Delete a Listing button with each listing itself ---
+Procedure:
+
+
+app.ejs: Main backend javascript file.
+
+views/listings:
+index.ejs: To show all listings
+show.ejs: To show a particular listing in detail
+new.ejs: Form to create a new listing
+
+
+
+
+// PART-2:
+Till Now: We have build a simple website using Mongodb, express, ejs. Where we can list some listings/hotels, after clicking on any of them we get detailed info about that hotel, there we have two buttons "delete" and "Edit". From there we will go to diff page of Edit. On index.ejs where we have all listing we have a button to create a new listing, so one more ejs.
+
+Now: We have design all of them.
+
+EJS Mate: 
+npm i ejs-mate >> const ejsMate = require("ejs-mate");
+EJS Mate: Helps to create templates. 
+// See, it is not a good thing to write lot of things in a single file. It is preferred to create seperate files for small-small things as well. So, that we can easily reuse, debug, update the things easily in future.
+
+Create a file inside a folder views(folder) >> layouts(folder) >> boilderplate.ejs
+
+// boilerplate means common. the code/thing shared by many others. So, this boilerplate.ejs file's code/template will be shared by many of the other files.
+
+We will write basic HTML template inside this boilerplate.ejs and will remove HTML from index.ejs and show.ejs and keep the body same. 
+
+inside boilerplate.ejs:
+<%- body %> // means the body tag of other file in which we want to use this boilerplate code will come at this position.
+
+inside index.ejs: 
+<% layout("../layouts/boilerplate") %> // keep it a the top of file(that is importing boilerplate.ejs). It says it will use that boilerplate.ejs file's code.
+
+
+What we are doing here? We are sharing this same boilderplate.ejs code with more than one ejs templates.
+
+
+Task: 
+Create a navbar and a footer that will remain same in most of the templates.
+
+include(folder) >> footer.ejs, navbar.ejs (files). Navbar created with the help of bootstrap and applied static CSS on both. 
+
+Task: 
+Styling Index.ejs, new.ejs, show.ejs, edit.ejs;
+Index.ejs: Used bootstrap cards.
+new.ejs, edit.ejs: same form styling.
+show.ejs also styled.
+
+/* To make footer stick on bottom */
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container-fluid{
+    flex:1;
+}
+
+
+NOTE: IMP:
+See row and column is an amazing thing to adjust things using Bootstrap.
+Row means we are creating a single row, if number of items increase and you want to create multiple rows, you have to mention that, no of columns you want to keep you have to mention that simple.
+
+
+
