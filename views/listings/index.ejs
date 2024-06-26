@@ -1,27 +1,22 @@
 <% layout("../layouts/boilerplate") %>
 <body>
     
-    <h1>All Listings</h1>
+    <h1 class="mt-4">All Listings</h1>
 
-    <!-- Using Bootstrap cards for styling. -->
-    <div class="row row-cols-md-3 d-flex justify-content-center"> 
-        <!-- This row is a bootstrap class that allows to create horizontal grouping of columns. Means by default there will be a single row and all the content will be created as a column and all the columns will be there in a single row by default. But definitely we will change that. -->
-
-        <% for (list of allListings)
-        {%>
-            <a href="/listings/<%=list._id%>" class="listing-link">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="<%=list.image%>" alt="Card image cap" style="height: 20rem;">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
+        <% for (list of allListings) { %>
+        <!-- <div class="col mb-4"> -->
+            <a href="/listings/<%= list._id %>" class="listing-link text-decoration-none mb-4">
+                <div class="card">
+                    <img src="<%= list.image %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
                     <div class="card-body">
-                        <b><p class="card-text"><%= list.title %></p></b> 
-                        <p class="card-text"> &#8377; <%= list.price.toLocaleString('en-IN') %> / night</p>
+                        <h5 class="card-title"><%= list.title %></h5>
+                        <p class="card-text">&#8377; <%= list.price.toLocaleString('en-IN') %> / night</p>
                     </div>
                 </div>
             </a>
-            
-        <%}%>
-
+        <!-- </div> -->
+        <% } %>
     </div>
-
 </body>
 

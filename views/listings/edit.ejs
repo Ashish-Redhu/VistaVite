@@ -7,20 +7,32 @@
     <!-- offset-2, means we want to give spacing from left side. -->
     <div class="col-8 offset-2">
     <h1 style="margin-top: 2rem">Edit the Listing</h1>
-    <form action="/listings/<%=listingdata.id%>/edit?_method=PUT" method="POST" style="margin-top: 2rem;">
+    <form action="/listings/<%=listingdata.id%>/edit?_method=PUT" method="POST" style="margin-top: 2rem;" class="needs-validation" novalidate>
         <div class="form-group mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" name="x[title]" id="title" value="<%=listingdata.title%>" class="form-control">
+            <input type="text" name="x[title]" id="title" value="<%=listingdata.title%>" class="form-control" required>
+            <div class="valid-feedback">
+                Looks good!
+              </div>
+              <div class="invalid-feedback">
+                Title field can't be empty.
+          </div>
         </div>
         
         <div class="form-group mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea name="x[description]" id="description" placeholder="enter some description" class="form-control"><%=listingdata.description%></textarea>
+            <textarea name="x[description]" id="description" placeholder="enter some description" class="form-control" required><%=listingdata.description%></textarea>
+            <div class="invalid-feedback">
+                Please add some description.
+           </div>
         </div>
         
         <div class="form-group mb-3">
             <label for="image" class="form-label">Image URL</label>
-            <input type="text" name="x[image]" id="image" value="<%=listingdata.image%>" class="form-control">
+            <input type="text" name="x[image]" id="image" value="<%=listingdata.image%>" class="form-control" required>
+            <div class="invalid-feedback">
+                Image URL is mendatory.
+           </div>
         </div>
 
 
@@ -28,19 +40,28 @@
         <div class="row">
             <div class="form-group mb-3 col-md-4">
                 <label for="price" class="form-label">Price</label>
-                <input type="number" name="x[price]" id="price" value="<%=listingdata.price%>" class="form-control">
+                <input type="number" name="x[price]" id="price" value="<%=listingdata.price%>" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please add some price.
+              </div>
             </div>
     
             <div class="form-group mb-3 col-md-8">
                 <label for="country" class="form-label">Country</label>
-                <input type="text" name="x[country]" id="country" value="<%=listingdata.country%>" class="form-control">
+                <input type="text" name="x[country]" id="country" value="<%=listingdata.country%>" class="form-control" required>
+                <div class="invalid-feedback">
+                    Country field can't be empty.
+              </div>
             </div>
         </div>
         
         
         <div class="form-group mb-3">
             <label for="location" class="form-label">Location</label>
-            <input type="text" name="x[location]" id="location" value="<%=listingdata.location%>" class="form-control">
+            <input type="text" name="x[location]" id="location" value="<%=listingdata.location%>" class="form-control" required>
+            <div class="invalid-feedback">
+                It is mendatory to set some location.
+          </div>
         </div>
        
         <br>

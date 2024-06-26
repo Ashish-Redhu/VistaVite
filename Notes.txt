@@ -104,3 +104,13 @@ Row means we are creating a single row, if number of items increase and you want
 
 
 
+// Phase-1(Phase-3) -- Validations: 
+Client-side (Form validation): 
+i) Only one logic applied that is "required". We make some fields required. But use Bootstrap classes to make the experience of user same on all browsers. Also used these thing with form tag: class="needs-validation" novalidate.
+novalidate: It will stop the default form validation of browser and we will use Bootstrap's layout validation.
+ii) script.js inside public folder: this contains the logic of bootstrap form validation. 
+
+
+
+
+
