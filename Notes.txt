@@ -110,6 +110,44 @@ i) Only one logic applied that is "required". We make some fields required. But 
 novalidate: It will stop the default form validation of browser and we will use Bootstrap's layout validation.
 ii) script.js inside public folder: this contains the logic of bootstrap form validation. 
 
+* Updates made in new.ejs, show.ejs, boilerplate for bootstrap migration.
+
+
+
+iii) utils folder: contain all the other utilityy files and folders
+
+iv) wrapAsync inside utils folder: this is used at the place of try-catch to improve the way of writing code for error-handling.
+
+v) ExpressError: This is for custom errors.
+
+vi) Although we have already added "required" field in new/update fields but still we have added one more layer of error-handling. That is, it may happen that someone send some empty request using hopscotch/postman etc.
+using (!req.params.x) => then send a custom error.
+
+viii) Used app.all(*) to handle all other url requests. Along with app.use() at the end to handle all other types of errors.
+
+ix) Used a seperate file/view "error.ejs" to show a better interface to the user in case of some error occur.
+
+
+Now validation is done, means user can't send empty form/object using website or even using some APIs like hopscotch/postman, but one problem is still there and i.e what if someone send few details proper and few details of form/object empty using some API like hopscotch/Postman. 
+
+way-1) either we will apply the check for each entry of form to check either it is non-empty or not to store it into database and update on website then. But not an efficient manner.
+
+way-2) use "joi" a liabrary of npm which is used for data-validation(means to check either the data send by user to server meets some specific requirements or not). Better way.
+--------------- npm install joi -----------
+
+Here we define a schema of joi, remember it is not our MongoDB schema, it is simply a struture which would be matched with the struture of data send by user. And definitely, this struture will look bit similar to MongoDB schema, because at the end we are storing the things in DB must be same as send by user. But we are not directly exploiting Database for security reasons.
+
+
+-------- schema.js ---------
+this is a file which contains a schema of joi for data-validation.
+** Read that file properly **
+
+
+
+
+
+
+
 
 
 

@@ -4,6 +4,10 @@ const path = require("path");
 const Listing = require("./models/listing.js");
 const methodOverride = require("method-override"); // to make requests other than GET and POST.
 const ejsMate = require("ejs-mate");     // Helps to create templates. 
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
+const { listingSchema } = require("./schema.js");
+
 
 // Setting up an express app.
 const app = express();
@@ -14,8 +18,18 @@ app.listen(PORT, ()=>{
 
 // This is for telling to NodeJS, "hey, view engine is ejs. So, Node view engine(ejs) will look for views in the view folder whose path we set in second line."
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "./views/listings")); // We are telling ki bhai apne jo views/ejs files h wo ejs >> listings ke ander h. 
+
+
+// app.set("views", path.join(__dirname, "./views/listings")); // We are telling ki bhai apne jo views/ejs files h wo ejs >> listings ke ander h. 
 // We have done this because it may happen in future we have to create some views for a particular user or something like that then we will create in seperate folder inside "views".
+// app.set("views", path.join(__dirname, "./views"));
+
+// To set multiple views: 
+app.set("views", [
+    path.join(__dirname, "./views"),
+    path.join(__dirname, "./views/listings")
+  ]);
+
 
 // To make Node able to understand the data received in diff-diff formats that is availabe in "req.body";
 app.use(express.urlencoded({extended: true}));
@@ -30,10 +44,10 @@ app.get("/", (req, res)=>{
 })
 
 // Show all the listings/entries/hotels.
-app.get("/listings", async (req, res)=>{
+app.get("/listings", wrapAsync(async (req, res)=>{
     const allListings = await Listing.find({});
     res.render("index.ejs", {allListings});
-})
+}))
 
 // ::: NOTE :::
 // if you use API which is like "/listings/something", it will not work if it is after "/listings/:id" because listings/id will look for some id. So, always use them before it. Yeah if something related to "listing/id" is there then you can use after it as well.
@@ -57,51 +71,119 @@ app.get("/listings/new", (req, res)=>{
 //     .catch(()=>{console.log("Some error in saving");})
 //     res.redirect("/listings");
 // })
+
 // Way-2: Better
-// for that we have we have make change in the "form" of new.ejs, where the name is there we have to keep the name same as we have in our database collection properties. Also we have make then key's of an object name can be anything, like here x. So that we can directly access them.
-app.post("/listings/new", (req, res)=>{
-    const newListing = new Listing(req.body.x);
-    newListing.save().then(()=>{
-        console.log("Successfully saved");
-    }).catch(()=>{
-        console.log("Some error while saving");
-    })
-    res.redirect("/listings");
-})
+// i) for that we have make change in the "form" of new.ejs, where the name is there we have to keep the name same as we have in our database collection properties. Also we have make then key's of an object name can be anything, like here x. So that we can directly access them.
+// ii) we have used async-await at the place of .then, .catch. Also used try-catch.
+// iii) Best way: used asyncWrap method. Combo of both above.
+
+
+const validateListing = (req, res, next)=>{
+    const result = listingSchema.validate(req.body);  // Joi data-validation: 
+        console.log(result);
+        if(result.error){
+                throw new ExpressError(400, result.error);
+        }
+        else
+        {next();}
+    
+}
+
+app.post("/listings/new", validateListing, wrapAsync(async(req, res)=>{
+   
+    //i) Not a modern thing to use .then(), .catch();
+    // .then(()=>{
+    //     console.log("Successfully saved");
+    // }).catch(()=>{
+    //     console.log("Some error while saving");
+    // })
+
+
+    //ii) Used async-await at the place of .then(), .catch(). Also used try-catch. 
+    // try{
+    //     const newListing = new Listing(req.body.x);
+    //     await newListing.save();
+    //     res.redirect("/listings");
+    // }
+    // catch(err){
+    //     res.send("Some error occured");s
+    // }
+
+
+    // iii) best way. async-await + error handling.
+    console.log(req.body);
+    // if(!req.body.x){
+    //     throw new ExpressError(400, "Send valid data for listing");
+    // }
+
+
+    // ::: Better way ::::
+        // const result = listingSchema.validate(req.body);  // Joi data-validation: 
+        // console.log(result);
+        // if(result.error){
+        //         throw new ExpressError(400, result.error);
+        // }
+
+    // ::::: More better way using middleware. ::::::
+        const newListing = new Listing(req.body.x);
+        await newListing.save();
+        res.redirect("/listings");
+    // Now if it throws some error it will go to error handling middleware.
+}))
 
 
 
 // Showing a particular listing in details on some other page.
-app.get("/listings/:id", async (req, res)=>{
+app.get("/listings/:id", wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("show.ejs", {listing});
 
-})
+}))
 
 
 // Edit a listing:
-app.get("/listings/:id/edit", async (req, res)=>{
+app.get("/listings/:id/edit", validateListing, wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listingdata = await Listing.findById(id);
     res.render("edit.ejs", {listingdata});
-})
-app.put("/listings/:id/edit", async (req, res)=>{
+}))
+app.put("/listings/:id/edit", wrapAsync(async (req, res)=>{
     let {id} = req.params;
+    // Already we have set "required" on frontend, still we are adding 1-more layer for error handling, that it may happen that someone send some empty request using hopscotch/postman etc.
+    // if(!req.body.x)
+    // {
+    //    throw new ExpressError(400, "Send valid data for listing");
+    // }
     // await Listing.findByIdAndUpdate(id, req.body.x);  way-1
     await Listing.findByIdAndUpdate(id, {...req.body.x}); // way-2
     console.log("Successfully updated");
     res.redirect(`/listings/${id}`);
-})
+}))
 
 // Delete a Listing:
-app.delete("/listings/:id", async(req, res)=>{
+app.delete("/listings/:id", wrapAsync(async(req, res)=>{
     const {id} = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);
     console.log("Item deleted");
     // console.log(deletedListing);
     res.redirect("/listings");
+}))
+
+
+
+// If any of the request doesn't match with url/api, it will be handled here.
+app.all("*", (req, res, next)=>{
+    next(new ExpressError(404, "Page not found"));
 })
+
+// This is last error handling middleware, which will handle all the errors that have not been handleed prior.
+app.use((err, req, res, next)=>{
+    let {statusCode=500, message="Some error occured!"} = err;
+    // res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs", {message});
+})
+
 
 
 
@@ -121,20 +203,7 @@ main()
 
 
 
-// Ke bhai directly app aik nai entry create mat karna. Jaise hi koi iss url pe jaye "/listings" pe tabhi aik nayi listing kar dena.
-// app.get("/listings", async(req, res)=>{
-//     let newlisting = new Listing({
-//         title: "Villa 1",
-//         description: "Hello this is first villa.",
-//         price: 1200,
-//         location: "Delhi", 
-//         country: "India"
-//     })
-//     await newlisting.save();
-//     console.log("Sample saved");
-//     res.send("sammple saved");
-// })
-// So that data doesn't insert again and again. This was for 1-time insertion checking.
+
 
 
 
