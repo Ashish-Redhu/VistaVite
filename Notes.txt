@@ -173,6 +173,17 @@ Delete the reviews from review model which are associated with this listing/hote
 
 
 
+// ---------- Phase-2 (Part-b) -------------
+Express Router: 
+Simply a feature of express to reduce the bulkiness of our main backend file app.js. It helps to write the code for seperate models in seperate files and then require them in main backend file.
 
+Procedure: 
+Created a folder routes and two files "listing.js" and "review.js" inside it. These are the backend files for these two modules. 
+Restructuring listing module. 
+Restructuring review module.
+
+Imp: 
+Don't forget to adjust the paths properly for the files we are requiring.
+const router = express.Router({mergeParams: true}); See, whenever we are defining a specific common path for the routes, then it may happen that the route may contain some parent variable like "id" which would be diff for diff-diff users, so it should not be treated as a common/fixed path for all. So, it is used for defining the seperate parent path for diff-diff users. 
 
 
