@@ -15,4 +15,18 @@ const listingSchema = Joi.object({
       // This outer required-condition is to check that the complete object should be there. Means it should not be like someone send completely empty object or doesn't send object.
 
 });
-module.exports = {listingSchema};
+
+const reviewSchema = Joi.object({
+  review: Joi.object({
+    comment: Joi.string().required(),
+    rating: Joi.number().required().min(1).max(5),
+  }).required(),
+})
+
+module.exports = {listingSchema,reviewSchema};
+
+// We can exports in some other way as well. like "module.exports.reviewSchema" to directly export, then no need of this last line "module.exports = {listingSchema,reviewSchema};"
+
+// Here remember one thing, jo ye chojon ke naam h ye same hone chahiye jo ki apne actual database wale model ke ander names h, because overall to jo chijein user send kar rha h unhe humein inse compare karke ki sahi send data h ki nahi at the end database ke ander store karwana h. Ye to bas bich mein aik validation ke liye h. Haan, jo "review" name h, wo wahi same name hoga, jo frotend user ke input elements ke name mein use kiya gya tha. 
+
+

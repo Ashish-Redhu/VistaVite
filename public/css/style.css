@@ -76,7 +76,7 @@ body{
 
 
 /* Cards styling inside index.ejs*/
-.card{
+.listing-card{
     border: none !important;
     margin: 0 0.5rem 3rem 0.5rem !important;
 }

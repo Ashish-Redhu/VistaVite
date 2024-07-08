@@ -2,18 +2,17 @@
 <body>
     <div class="row mt-3">
         <div class="col-10 offset-2">
-            <h2 style="margin-left: 2rem;">Listing Details</h2>
+            <h2 style="margin-left: 1rem;"><%=listing.title%></h2>
     
             <div class="card col-8">
                 <img class="card-img-top show-img" src="<%=listing.image%>" alt="Card image cap">
                 <div class="card-body">
-                  <p class="card-text font-weight-bold"><%=listing.title%></p>
                   <p class="card-text" style="color: black;"> <%=listing.description%>  </p>
                   <p class="card-text"> &#8377; <%=listing.price.toLocaleString('en-IN')%> </p>
                   <p class="card-text"> <%=listing.location%> </p>
                   <p class="card-text"> <%=listing.country%> </p>
                 </div>
-                <div class="buttoncontainer">
+                <div class="buttoncontainer mb-2">
                     <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
                     <br>
                    <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
@@ -21,6 +20,58 @@
                    </form>
                 </div>
             </div>
+            <div class="col-8 mb-3">
+                <hr>
+                <h4>Leave a Review</h4>
+                <form action="/listings/<%=listing.id%>/reviews" method="POST" class="needs-validation" novalidate>
+                    <div class="mb-3 mt-3">
+                        <!-- label is set on the basis of id. -->
+                         <!-- name is for accessing the things in backend. -->
+                        <label for="rating" class="form-label">Rating</label>
+                       <input type="range" name="review[rating]" id="rating" min="1" max="5" class="form-range">
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+                        <div class="invalid-feedback">
+                            Please add some comments.
+                      </div>
+                    </div>
+                    <button class="btn btn-outline-dark">Submit</button>
+                </form>
+            </div>
+
+            <div class="col-8 mb-3 reviews row">
+                <hr>
+                <h4>All Reviews</h4>
+                <!-- <p><%=listing.reviews%></p> -->
+
+                <!-- Way-1: wrong-->
+                <!-- <%for(list of listing.reviews){%>
+                    <p><%=list.comment%></p>
+                <%}%> -->
+
+                <!-- Way-2: By populating listing on the basis of reviews. -->
+                <!-- But there is an issue with way-1, way-1 would be able to print the reviews only if the review object is actually present inside the listing. But the object of review is not present in listing, only it's oject-id is present. So, wherever we are calling show.ejs and passing listing inside it. We have to populate it. All other things are same. Populate simply expand the things/object review. -->
+                <!-- <%for(list of listing.reviews){%>
+                    <p><%=list.comment%></p>
+                <%}%> -->
+
+                <%for(review of listing.reviews){%>
+                <div class="card col-5 mb-3 ms-3">
+                    <div class="card-body">
+                      <h5 class="card-title">Rahul</h5>
+                      <p class="card-text"><%=review.comment%></p>
+                      <p class="card-text"><%=review.rating%> stars</p>
+                    </div>
+
+                    <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-3">
+                        <button class="btn btn-sm btn-dark">Delete</button>
+                      </form>
+                  </div>
+                <%}%> 
+            </div>
+
         </div>
     </div>
     

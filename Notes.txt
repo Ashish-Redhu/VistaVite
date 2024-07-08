@@ -104,7 +104,7 @@ Row means we are creating a single row, if number of items increase and you want
 
 
 
-// Phase-1(Phase-3) -- Validations: 
+// Phase-1(Part-3) -- Validations: 
 Client-side (Form validation): 
 i) Only one logic applied that is "required". We make some fields required. But use Bootstrap classes to make the experience of user same on all browsers. Also used these thing with form tag: class="needs-validation" novalidate.
 novalidate: It will stop the default form validation of browser and we will use Bootstrap's layout validation.
@@ -144,6 +144,30 @@ this is a file which contains a schema of joi for data-validation.
 
 
 
+
+// Phase-2 (Part-a): 
+New Model: Reviews (comment, rating, createdAt). For now we are not using creatingAt that much. Also, now we are not storing, by whom the review has been created. Lateron we will use them.
+
+// Listing : Review --  (one to many) : We want to make a connection b/w "listing" and "review". Because each listing/hotel will have some reviews. So, we will make an array inside listing model which will store the object ids of reviews.
+
+Created a new model "Review"
+Created a form at the end of each listing in "show.ejs"
+Implemented the basic functionality of "reviews" in "app.js"
+
+Validation for Reviews: 
+i) Client side: It will handle the wrong inputs made using our website/client.
+ii) Server side using Joi: It will handle the wrong inputs made using some third party service or APIs like Hoppscotch/Postman etc. 
+Same as we done for listing.
+
+Rendering Reviews: 
+On the show.ejs. 
+Populate listing in app.js where we are passing listing inside show.ejs. populate on the basis of reviews. Because we want to expant that reviews object ids. 
+
+Deleting a Review.
+Delete it from review's model. Also, delete it from the Listing's review array.
+
+Deleting a Listing.
+Delete the reviews from review model which are associated with this listing/hotel. How we can do that ? Simply we have the object/listing we have deleted from it's array of reviews we can take out the object-ids of reviews and then delete those reviews from review-model.
 
 
 
