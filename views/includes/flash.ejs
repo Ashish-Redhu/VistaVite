@@ -1,0 +1,18 @@
+<!-- We will use bootstrap alerts to show this message in a better way. -->
+<% if(successMsg && successMsg.length) {%>
+<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+    <!-- The below "success" variable contain that flash message. This is the local variable present in middleware. -->
+    <%= successMsg %>
+    <!-- The below button is for that "cross" icon to delete this pop-up message. -->
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
+<% if(errorMsg && errorMsg.length) {%>
+    <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+        <!-- The below "success" variable contain that flash message. This is the local variable present in middleware. -->
+        <%= errorMsg %>
+        <!-- The below button is for that "cross" icon to delete this pop-up message. -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>

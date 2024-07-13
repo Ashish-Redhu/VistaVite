@@ -89,6 +89,9 @@ router.post("/new", validateListing, wrapAsync(async(req, res)=>{
     // ::::: More better way using middleware. ::::::
         const newListing = new Listing(req.body.x);
         await newListing.save();
+
+        // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else.
+        req.flash("success", "New Listing Created!");
         res.redirect("/listings");
     // Now if it throws some error it will go to error handling middleware.
 }))
@@ -99,6 +102,13 @@ router.post("/new", validateListing, wrapAsync(async(req, res)=>{
 router.get("/:id", wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listing = await Listing.findById(id).populate("reviews");
+
+    // connect-flash to show a pop-up error message if someone try to access a listing which doesn't exist. He/she may try to access with the help of link. 
+    if(!listing)
+    {
+        req.flash("error", "Listing you have request for doesn't exist.");
+        res.redirect("/listings");
+    }
     res.render("show.ejs", {listing});
 
 }))
@@ -108,6 +118,11 @@ router.get("/:id", wrapAsync(async (req, res)=>{
 router.get("/:id/edit", wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listingdata = await Listing.findById(id);
+    if(!listingdata)
+        {
+            req.flash("error", "Listing you have request for doesn't exist.");
+            res.redirect("/listings");
+        }
     res.render("edit.ejs", {listingdata});
 }))
 router.put("/:id/edit", validateListing, wrapAsync(async (req, res)=>{
@@ -120,6 +135,7 @@ router.put("/:id/edit", validateListing, wrapAsync(async (req, res)=>{
     // await Listing.findByIdAndUpdate(id, req.body.x);  way-1
     await Listing.findByIdAndUpdate(id, {...req.body.x}); // way-2
     console.log("Successfully updated");
+    req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);
 }))
 
@@ -130,6 +146,7 @@ router.delete("/:id", wrapAsync(async(req, res)=>{
     const deletedListing = await Listing.findByIdAndDelete(id);   // This will send the request to "findOneAndDelete" mongoose-middleware. And, this middleware definition must be present just-below the schema which is calling this findbyIdandDelete method. So, here listing-schema. Because on the basis of listing we will find and delete something. But the listing schema is not present in app.js, we are importing it. So, we have to write this mongoose-middleware inside "models >> listing.js".
     console.log("Item deleted");
     // console.log(deletedListing);
+    req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
 }))
 

@@ -182,8 +182,55 @@ Created a folder routes and two files "listing.js" and "review.js" inside it. Th
 Restructuring listing module. 
 Restructuring review module.
 
+// Require those two files
+const listing = require("./routes/listing.js");
+const review = require("./routes/review.js");
+
+// Then use them 
+app.use("/listings", listing);
+app.use("/listings/:id/reviews", review);
+
+*Here we used the comman path that the files will follow.
+
 Imp: 
 Don't forget to adjust the paths properly for the files we are requiring.
 const router = express.Router({mergeParams: true}); See, whenever we are defining a specific common path for the routes, then it may happen that the route may contain some parent variable like "id" which would be diff for diff-diff users, so it should not be treated as a common/fixed path for all. So, it is used for defining the seperate parent path for diff-diff users. 
+
+
+
+// ----------- Phase-2 (Part-C) -----------------
+Session, cookie, connect flash
+npm i express-session connect-flash
+
+Here what we want ? 
+We simply want if somone adds a new listing, a message a shown. 
+When someone edits/delete a listing a new message is popup. 
+When someone wants to acces a listing that doesn't exist, an error message pop up. All these things can be done with the help of connect-flash. 
+
+// Code:::
+* This is inside listing.js route file. 
+const newListing = new Listing(req.body.x);
+await newListing.save();
+
+//i) Here we have simply created the flash. How and where to show is defined somewhere else.
+req.flash("success", "New Listing Created!");
+res.redirect("/listings");
+
+* We will show all the pop-up messages on top of screen so, we will show them in "layout >> flash.ejs" and include that in "boilderplate.ejs". 
+
+//ii) This is inside app.js file. Here we stored the message of that flash inside a local variable inside inside middleware so that it can be accessible by all the pages. 
+app.use((req, res, next)=>{
+    res.locals.successMsg = req.flash("success");
+    next();
+})
+
+
+//iii) Shown the all types of messages inside "flash.ejs" which is included inside "boilerplate.ejs". 
+
+
+
+*** When we will show pop-up error message ? ***
+eg.> When someone try to access or edit the listing which doesn't exist with the help of link.
+
 
 

@@ -7,7 +7,8 @@ const ejsMate = require("ejs-mate");     // Helps to create templates.
 const ExpressError = require("./utils/ExpressError.js");
 const listing = require("./routes/listing.js");
 const review = require("./routes/review.js");
-
+const session = require("express-session");
+const flash = require("connect-flash");
 
 // Setting up an express app.
 const app = express();
@@ -42,6 +43,33 @@ app.use(methodOverride("_method"));
 // To use static files.
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
+
+
+// Include session and cookies.
+const sessionOptions = {
+    secret: "mysupersecretkey", // we will change it later.
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + (7*24*60*60*1000), // Here we have saved the cookie for next 7-days. And time is provided in milliseconds. 
+        maxAge: 7*24*60*60*1000,
+        httpOnly: true // This is for security reasons to prevent cross scripting attaks.
+    },
+}
+app.use(session(sessionOptions));
+
+// Include connect flash which itself is a part of session. 
+app.use(flash());
+
+// Here we stored the message of "success" flash in local variable named as "success", this local variable is in middleware so will be accessible by all the pages. 
+app.use((req, res, next)=>{
+    res.locals.successMsg = req.flash("success");
+    res.locals.errorMsg = req.flash("error");
+    console.log(res.locals.successMsg);
+    console.log(res.locals.errorMsg);
+    next();
+})
+
 
 app.get("/", (req, res)=>{
     res.send("You are in home directory");
