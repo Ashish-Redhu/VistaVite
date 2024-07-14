@@ -5,10 +5,14 @@ const methodOverride = require("method-override"); // to make requests other tha
 const ejsMate = require("ejs-mate");     // Helps to create templates. 
 // const wrapAsync = require("./utils/wrapAsync.js"); // Because now it is not in use.
 const ExpressError = require("./utils/ExpressError.js");
-const listing = require("./routes/listing.js");
-const review = require("./routes/review.js");
+const listingRoute = require("./routes/listingRoute.js");
+const reviewRoute = require("./routes/reviewRoute.js");
+const userRoute = require("./routes/userRoute.js");
 const session = require("express-session");
 const flash = require("connect-flash");
+const User = require("./models/user.js"); // This is User model not route.
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 // Setting up an express app.
 const app = express();
@@ -28,7 +32,8 @@ app.set("view engine", "ejs");
 // To set multiple views: 
 app.set("views", [
     path.join(__dirname, "./views"),
-    path.join(__dirname, "./views/listings")
+    path.join(__dirname, "./views/listings"),
+    path.join(__dirname, "./views/users")
   ]);
 
 
@@ -61,6 +66,25 @@ app.use(session(sessionOptions));
 // Include connect flash which itself is a part of session. 
 app.use(flash());
 
+
+// For passport:::::
+app.use(passport.initialize()); 
+app.use(passport.session()); // It is important to use this so that the web-application get to know when requests are made on it's diff-diff pages are made by the same user or not. Because if session is same then the user will be considered as same else diff user can be there.
+passport.use(new LocalStrategy(User.authenticate())); // passport.use: A middleware inside which it is told that use "LocalStrategy" which is the main working department of "passport" and authenticate the user created. 
+passport.serializeUser(User.serializeUser()); // Whenever a new user come on the website, means started a new session then we starting getting his/her data, that means serializing.
+passport.deserializeUser(User.deserializeUser()); // Whenever someone leaves the website, we simply deletes his/her data, except some info, this is deserialization.
+
+// The below new user of "/demouser" is for temporary testing basis. 
+/*
+app.get("/demouser", async (req, res)=>{
+    let fakeUser = new User({
+        email:"fakeuser@gmail.com",
+        username: "fake" // even though we haven't defined username in the schema of "User" still we can insert this field. As passport itself create these fields. 
+    });
+    let registeredUser = await User.register(fakeUser, "fakePassword"); // Notice here, we haven't used fakeuser.save(); We have used User(model_name).register(object, passwordForThisObject); This is because we are using "passport".
+    res.send(registeredUser);
+})
+*/
 // Here we stored the message of "success" flash in local variable named as "success", this local variable is in middleware so will be accessible by all the pages. 
 app.use((req, res, next)=>{
     res.locals.successMsg = req.flash("success");
@@ -75,9 +99,9 @@ app.get("/", (req, res)=>{
     res.send("You are in home directory");
 })
 
-app.use("/listings", listing);
-app.use("/listings/:id/reviews", review);
-
+app.use("/listings", listingRoute);
+app.use("/listings/:id/reviews", reviewRoute);
+app.use("/", userRoute);
 
 
 // If any of the request doesn't match with url/api, it will be handled here.
