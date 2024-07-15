@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
 const { listingSchema} = require("../schema.js");
+const {isLoggedIn} = require("../middleware.js");
 
 // Show all the listings/entries/hotels.
 router.get("/", wrapAsync(async (req, res)=>{
@@ -15,7 +16,8 @@ router.get("/", wrapAsync(async (req, res)=>{
 // if you use API which is like "/listings/something", it will not work if it is after "/listings/:id" because listings/id will look for some id. So, always use them before it. Yeah if something related to "listing/id" is there then you can use after it as well.
 
 // Create a new listing.
-router.get("/new", (req, res)=>{
+router.get("/new", isLoggedIn, (req, res)=>{
+    // This isLoggedIn is working as a middleware. 
     res.render("new.ejs");
 })
 // Way-1:
@@ -115,7 +117,7 @@ router.get("/:id", wrapAsync(async (req, res)=>{
 
 
 // Edit a listing:
-router.get("/:id/edit", wrapAsync(async (req, res)=>{
+router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listingdata = await Listing.findById(id);
     if(!listingdata)
@@ -123,9 +125,15 @@ router.get("/:id/edit", wrapAsync(async (req, res)=>{
             req.flash("error", "Listing you have request for doesn't exist.");
             res.redirect("/listings");
         }
+        // Authentication of loggedin before edit. 
+    // if(!req.isAuthenticated())
+    //         {
+    //             req.flash("error", "You must be loggedin to create a new listing");
+    //             return res.redirect("/login");
+    //         }
     res.render("edit.ejs", {listingdata});
 }))
-router.put("/:id/edit", validateListing, wrapAsync(async (req, res)=>{
+router.put("/:id/edit", isLoggedIn, validateListing, wrapAsync(async (req, res)=>{
     let {id} = req.params;
     // Already we have set "required" on frontend, still we are adding 1-more layer for error handling, that it may happen that someone send some empty request using hopscotch/postman etc.
     // if(!req.body.x)
@@ -141,7 +149,7 @@ router.put("/:id/edit", validateListing, wrapAsync(async (req, res)=>{
 
 
 // Delete a Listing:
-router.delete("/:id", wrapAsync(async(req, res)=>{
+router.delete("/:id", isLoggedIn, wrapAsync(async(req, res)=>{
     const {id} = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);   // This will send the request to "findOneAndDelete" mongoose-middleware. And, this middleware definition must be present just-below the schema which is calling this findbyIdandDelete method. So, here listing-schema. Because on the basis of listing we will find and delete something. But the listing schema is not present in app.js, we are importing it. So, we have to write this mongoose-middleware inside "models >> listing.js".
     console.log("Item deleted");

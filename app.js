@@ -89,8 +89,9 @@ app.get("/demouser", async (req, res)=>{
 app.use((req, res, next)=>{
     res.locals.successMsg = req.flash("success");
     res.locals.errorMsg = req.flash("error");
-    console.log(res.locals.successMsg);
-    console.log(res.locals.errorMsg);
+
+    // the below thing is to check which thing to show "Signup & Login" or "Logout";
+    res.locals.currUser = req.user;   // req.user stores the user that is loggedin in this session using "passport". If noone is loggedin it will contain undefined. 
     next();
 })
 

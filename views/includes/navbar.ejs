@@ -16,6 +16,17 @@
                 <a class="nav-link" href="/listings">All Listings</a>
                 <a class="nav-link" href="/listings/new">Create A New Listing</a>
             </div>
+
+            <!-- To show "Signup & Login" or "Logout" -->
+            <div class="navbar-nav ms-auto">
+                <!-- currUser is the res.local.currUser = req.user;  present in the middleware of app.js -->
+                 <!-- This stores the curren user logged in. If not loggedin, it will contain undefined. -->
+                <% if(!currUser) {%>
+                <a class="nav-link active" aria-current="page" href="/signup">SignUp</a>
+                <a class="nav-link" href="/login">Login</a> 
+                <% } else if(currUser) {%>
+                <a class="nav-link" href="/logout">Logout</a> <% }%>
+            </div>
         </div>
     </div>
 </nav>

@@ -267,6 +267,64 @@ await User.register(fakeUser, "fakePassword"); // inside "app.js"
 // Here, User is the model name "fakeUser" is the objectname or say new user we have defined now and then the password associated with this particular object. We are following this procedure at the place of "fakeUser.save()" because we are using "passport" and passport work with authentication which requires password. 
 
 userRoute.js:
-SignUp User procedure:
+1.) SignUp User procedure:
 i) app.get("/signup") - we will render the form to enter details. "users >> signup.ejs"
 ii) app.post("/signup") - as he/she submits the form we receive the post-request on this route and save the details in database after authentication. 
+
+2.) LogIn User procedure:
+i) app.get("/login") - we will show a form to enter username and password.
+ii) app.post("/login") - as he/she submits the form, we will receive the post-request and authenticate that the user exist or not and then login else we will show an error message and redirect to the login page again. 
+
+Code: 
+router.post("/login", passport.authenticate("local", {failureRedirect:"/login", failureFlash: true}),wrapAsync(async(req, res)=>{
+     req.flash("success", "Welcome back to Vista-Vite !"); // passport will fetch the details in form automatically.
+    res.redirect("/listings");
+}));
+// Remember one thing, the authentication for login by "passport" is done only by passing it as a middleware function. 2-arguments. First is "local" because we are doing authentication locally in our computer. Second is an object where 2-key value pairs, first tells where to redirect if login failed means user not already exist, second is either we want to show an error flash message or not. 
+
+
+
+// --------------- Phase-2 (Part-e) ------------------
+1.) Now we want to the user to create/edit/delete listings only if he/she is login. 
+req.isAuthenticated(); // This is a method of "passport" which checks either the user is present in database as well it is the current user who is logged in. 
+
+//i) Create a new listing. inside "listing.js" route. 
+router.get("/new", (req, res)=>{
+    if(!req.isAuthenticated())
+    {
+        req.flash("error", "You must be loggedin to create a new listing");
+        return res.redirect("/login");
+    }
+    res.render("new.ejs");
+})
+Do the same thing with edit and delete route. 
+Lateron we will add more functionalities like the person should be the owner of this property to delete/edit etc. 
+
+Note: After logout or restart of app.js, the session will end and a new session will start, that is why we have to login again. 
+
+Imp Note: Middleware: Whenever we want to share the same logic between multiple files we should put it in some middleware, rather than pasting it everwhere. So, we would write this concept of "isLoggedIn" in a "middleware.js" file and then require it in some variable and then use that as a middleware before edit/create/delete.
+
+
+ii) LogOut: This is an inbuilt method of "passport" which will delete the data of user from current session and log it out.  req.logOut(callbackFunction.);
+
+- Adding buttons for SignUp, Login, Logout along in "includes >> navbar.ejs". 
+iii)  Directly login after SignUp.
+  req.login(currUser, callbackFunction); Both the callbacks of logOut and login are similar.
+
+
+iv) post-login/signup page:
+After login/Signup we don't the user to go /listings page. But we want the user to go to the same page for which he/she has requested before login/signup. We want to do this for his convenience.
+
+middlewares >> saveRedirectUrl (this is also used as a middleware, ki bhai jahan pe bhi user ne request mari h, pehle uss path ko store karwa lo) >> fir dusra middleware, authentication wala run karo >> fir koi aur kam karo. 
+
+
+
+
+
+
+
+
+
+
+
+
