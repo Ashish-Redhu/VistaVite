@@ -13,11 +13,14 @@ main()
     console.log("Some error in connection", err);
 })
 
-Listing.insertMany(iniData.data)
-.then(()=>{
-    console.log("inserted multiple entries successfully.");
-})
-.catch((err)=>{
-    console.log("Some error while inserting", err);
-})
-
+const inDB = async ()=>{
+    await Listing.deleteMany({});
+    iniData.data = iniData.data.map((obj)=>{
+       return({...obj, owner: "6695fd2635ce9481f7719db1"});
+    })
+    await Listing.insertMany(iniData.data);
+}
+// ?? Here we have simply associated a single owner initially with all the properties. 
+// iniData is simply that file. iniData.data is the array of objects. 
+// Note: map always create a new array, which adds/remove something from the elements of previous array. 
+inDB();

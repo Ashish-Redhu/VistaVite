@@ -284,7 +284,10 @@ router.post("/login", passport.authenticate("local", {failureRedirect:"/login", 
 
 
 
-// --------------- Phase-2 (Part-e) ------------------
+
+//                        --------------- Phase-2 (Part-e) ------------------
+
+Authentication: 
 1.) Now we want to the user to create/edit/delete listings only if he/she is login. 
 req.isAuthenticated(); // This is a method of "passport" which checks either the user is present in database as well it is the current user who is logged in. 
 
@@ -319,6 +322,29 @@ middlewares >> saveRedirectUrl (this is also used as a middleware, ki bhai jahan
 
 
 
+Authorization: 
+i) We want to associate a particular owner with each listing/property and only that owner of that property can "edit/delete" that property. Also that owner must be the user. 
+ii) We want to associate a particular author with each review and only that author can delete that review. Also that author must be the user of our platform. 
+
+i) Authorization for listing: 
+// Remember one thing, whereever you find one file is getting heavy, then create small modules, means create a folder and create seperate files for each task in that file. That folder will contain files which will perform similar kind of tasks. Like middlewares for "listings, reviews, users" etc. 
+
+Steps: 
+a) Change the schema of listing inside "models >> listing.js" and update the data using "init" folder and map method. Here, we associated an Owner/User to a property/listing. 
+b) Store owner with each newly created listing as well inside "listingRoute >> "/new" post route"
+c) While edit/delete use a middleware "isOwner" to check either the person loggedIn and trying to update/delete is the owner of listing or not. 
+
+// req.user: Store the data of currently loggedIn user. 
+
+
+ii) Authorization for reviews:
+a) Change the schema of review inside "models >> review.js". Delete those earlier created reviews which don't have this field. Add the author field with each review when it is newly created inside "reviewRoute.js"
+b) Also, show the name of author of each review with it rather than a random name in "show.ejs". For this we have to nested populate each listing on the basis of "reviews", "author". 
+const listing = await Listing.findById(id).populate({path: "reviews", populate: {path: "author"}}).populate("owner");
+
+c) User must be loggedIn to add a review. Show this review-form only when the user is logged in. Also, show the Edit and Delete button only if the user is loggedIn as well as he is the owner of that listing. View "show.ejs".
+
+d) To delete a review, user must be loggedIn. Also, only the author of review can delete it.
 
 
 

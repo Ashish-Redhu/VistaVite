@@ -7,11 +7,15 @@
             <div class="card col-8">
                 <img class="card-img-top show-img" src="<%=listing.image%>" alt="Card image cap">
                 <div class="card-body">
+                  <h4 class="card-text" style="color: black;">Owner: <%=listing.owner.username%>  </h4>
                   <p class="card-text" style="color: black;"> <%=listing.description%>  </p>
                   <p class="card-text"> &#8377; <%=listing.price.toLocaleString('en-IN')%> </p>
                   <p class="card-text"> <%=listing.location%> </p>
                   <p class="card-text"> <%=listing.country%> </p>
                 </div>
+
+                <!-- 1st condition check either the user id loggedIn or not. 2nd condition check for it's ownership. -->
+                <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
                 <div class="buttoncontainer mb-2">
                     <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
                     <br>
@@ -19,7 +23,11 @@
                        <button class="btn btn-danger">Delete</button>
                    </form>
                 </div>
+                <% } %>
             </div>
+
+            <!-- Show the "Add Review" form only when the user is loggedIn. "currUser" is the local variable inside "app.js" middleware storing it. -->
+            <% if(currUser) {%>
             <div class="col-8 mb-3">
                 <hr>
                 <h4>Leave a Review</h4>
@@ -40,8 +48,9 @@
                     <button class="btn btn-outline-dark">Submit</button>
                 </form>
             </div>
+            <% }%>
 
-            <div class="col-8 mb-3 reviews row">
+            <div class="col-8 mt-3 mb-3 reviews row">
                 <hr>
                 <h4>All Reviews</h4>
                 <!-- <p><%=listing.reviews%></p> -->
@@ -60,7 +69,7 @@
                 <%for(review of listing.reviews){%>
                 <div class="card col-5 mb-3 ms-3">
                     <div class="card-body">
-                      <h5 class="card-title">Rahul</h5>
+                      <h5 class="card-title">@ <%= review.author.username %></h5>
                       <p class="card-text"><%=review.comment%></p>
                       <p class="card-text"><%=review.rating%> stars</p>
                     </div>

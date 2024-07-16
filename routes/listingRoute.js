@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
-const { listingSchema} = require("../schema.js");
-const {isLoggedIn} = require("../middleware.js");
+const {isLoggedIn, isOwner, validateListing} = require("../middleware.js");
 
 // Show all the listings/entries/hotels.
 router.get("/", wrapAsync(async (req, res)=>{
@@ -41,17 +39,6 @@ router.get("/new", isLoggedIn, (req, res)=>{
 // ii) we have used async-await at the place of .then, .catch. Also used try-catch.
 // iii) Best way: used asyncWrap method. Combo of both above.
 
-
-const validateListing = (req, res, next)=>{
-    const result = listingSchema.validate(req.body);  // Joi data-validation: 
-        console.log(result);
-        if(result.error){
-                throw new ExpressError(400, result.error);
-        }
-        else
-        {next();}
-    
-}
 
 router.post("/new", validateListing, wrapAsync(async(req, res)=>{
    
@@ -90,6 +77,7 @@ router.post("/new", validateListing, wrapAsync(async(req, res)=>{
 
     // ::::: More better way using middleware. ::::::
         const newListing = new Listing(req.body.x);
+        newListing.owner = req.user._id;    // Storing the owner as well with each listing.
         await newListing.save();
 
         // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else.
@@ -99,13 +87,16 @@ router.post("/new", validateListing, wrapAsync(async(req, res)=>{
 }))
 
 
-
+// Show page.
 // Showing a particular listing in details on some other page.
 router.get("/:id", wrapAsync(async (req, res)=>{
     const {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id).populate({path: "reviews", populate: {path: "author"}}).populate("owner");
 
+    // populate simply expands the thing. We use populate whenever we are storing the objectId of another model and want to use this inside object's properties like names, links etc. 
     // connect-flash to show a pop-up error message if someone try to access a listing which doesn't exist. He/she may try to access with the help of link. 
+    // populate on the basis of "owner" to store who is the owner of this listing. populate on the basis of "reviews" to show all the reviews. populate on the basis of "author" to store the name of owner of each review.
+
     if(!listing)
     {
         req.flash("error", "Listing you have request for doesn't exist.");
@@ -117,15 +108,15 @@ router.get("/:id", wrapAsync(async (req, res)=>{
 
 
 // Edit a listing:
-router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res)=>{
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(async (req, res)=>{
     const {id} = req.params;
     const listingdata = await Listing.findById(id);
     if(!listingdata)
-        {
+    {
             req.flash("error", "Listing you have request for doesn't exist.");
-            res.redirect("/listings");
-        }
-        // Authentication of loggedin before edit. 
+            return res.redirect("/listings");
+    }
+    // Authentication of loggedin before edit. 
     // if(!req.isAuthenticated())
     //         {
     //             req.flash("error", "You must be loggedin to create a new listing");
@@ -133,7 +124,7 @@ router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res)=>{
     //         }
     res.render("edit.ejs", {listingdata});
 }))
-router.put("/:id/edit", isLoggedIn, validateListing, wrapAsync(async (req, res)=>{
+router.put("/:id/edit", isLoggedIn, isOwner, validateListing, wrapAsync(async (req, res)=>{
     let {id} = req.params;
     // Already we have set "required" on frontend, still we are adding 1-more layer for error handling, that it may happen that someone send some empty request using hopscotch/postman etc.
     // if(!req.body.x)
@@ -149,11 +140,11 @@ router.put("/:id/edit", isLoggedIn, validateListing, wrapAsync(async (req, res)=
 
 
 // Delete a Listing:
-router.delete("/:id", isLoggedIn, wrapAsync(async(req, res)=>{
+router.delete("/:id", isLoggedIn, isOwner, wrapAsync(async(req, res)=>{
     const {id} = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);   // This will send the request to "findOneAndDelete" mongoose-middleware. And, this middleware definition must be present just-below the schema which is calling this findbyIdandDelete method. So, here listing-schema. Because on the basis of listing we will find and delete something. But the listing schema is not present in app.js, we are importing it. So, we have to write this mongoose-middleware inside "models >> listing.js".
     console.log("Item deleted");
-    // console.log(deletedListing);
+    console.log(deletedListing);
     req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
 }))
