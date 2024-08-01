@@ -349,6 +349,46 @@ d) To delete a review, user must be loggedIn. Also, only the author of review ca
 
 
 
+//                           -------------------- Phase-3 (Part-a) ---------------------------
+Till now we have done our basic concepts like models, database, routes, errorHandling, validation, authentication, Authorization.
+
+1.)
+MVC: Model, View, Controller
+Models: These are the structure/schema of a particular type of objects/documents we are going to store in database. Related to DB.
+Views: These are basically the EJS pages we want to show on going to diff-diff routes. Related to Frontend.
+Controllers: These are the actual backend functions we have to perform on going to diff-diff routes. Related to Backend.
+
+Till now what we have done is, we have simply combined both views and controllers with the routes, means on going to this route perform this opreation or on going to this route show this page. But we want to seperate this thing. Now we will write these functionalities of performing some task (controllers/functions) in seperate files. 
+We actually try to segrigate the things as much as possible.
+
+
+So, how the things will be from now ?
+i) We will create models in models folder ii) We will write our main backend file app.js iii) We will write all the views in views folder iv) We will create a routes-folder to seperate the paths for each model v) We will create a seperate folder "controllers" which will store the functions to perform on diff-diff routes. Because routes job is to simply route the things on diff-diff paths not to execute the functions as well. 
+
+visit: controllers >> .... and routes >> ... to get Implemented info.
+
+
+2.)
+Router.route: This is a way to write our routes in a more compact way. See, it may happen diff-diff types of requests like (get, delete, post) are coming on the same route to perform their respected tasks. So, we can combine these requests as their paths are same and they will look more compact.
+visit: routes >> ... to get Implemented info.
+
+
+3.) Re-Styling rating
+// i) Will use starability rating library present on github
+// ii) Copy one of the CSS from there and put it in a new file public >> CSS >> rating.css  
+// iii) Include this CSS inside boilerplate.
+// iv) Copy one of the HTML code from readme and paste it on the views/listings/show.ejs. As our rating is present on show.ejs and we want to show the stars there. 
+// v)
+<!-- To show the stars statically in the added comments. -->
+<p class="starability-result card-text" data-rating="<%=review.rating%>"></p>    
+// vi) 
+Change the class and name for each input in that HTML code we copied and pasted in show.ejs to take input from user.
+
+// Future: i) We can improve the look and feel of stars. ii) we can take the average all the ratings and show it on index.ejs page as well. 
+
+
+
+
 
 
 
