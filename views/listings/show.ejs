@@ -1,11 +1,16 @@
 <% layout("../layouts/boilerplate") %>
+<script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const listing = <%- JSON.stringify(listing) %>;
+    // These coordinates are getting fetched from DB and used by map.js to show a Marker.
+</script>
 <body>
     <div class="row mt-3">
         <div class="col-10 offset-2">
             <h2 style="margin-left: 1rem;"><%=listing.title%></h2>
     
             <div class="card col-8">
-                <img class="card-img-top show-img" src="<%=listing.image%>" alt="Card image cap">
+                <img class="card-img-top show-img" src="<%=listing.image.url%>" alt="Card image cap">
                 <div class="card-body">
                   <h4 class="card-text" style="color: black;">Owner: <%=listing.owner.username%>  </h4>
                   <p class="card-text" style="color: black;"> <%=listing.description%>  </p>
@@ -25,6 +30,15 @@
                 </div>
                 <% } %>
             </div>
+
+            <!-- To show Map. -->
+             <div class="col-8 mb-3">
+                <h3>Locate hotels on map</h3>
+                <div id="map"></div>
+
+             </div>
+            
+            
 
             <!-- Show the "Add Review" form only when the user is loggedIn. "currUser" is the local variable inside "app.js" middleware storing it. -->
             <% if(currUser) {%>
@@ -68,6 +82,8 @@
             </div>
             <% }%>
 
+            <!-- To Show all the reviews -->
+           <% if(listing.reviews.length > 0) {%>
             <div class="col-8 mt-3 mb-3 reviews row">
                 <hr>
                 <h4>All Reviews</h4>
@@ -97,11 +113,12 @@
                     <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-3">
                         <button class="btn btn-sm btn-dark">Delete</button>
                       </form>
-                  </div>
+                </div>
                 <%}%> 
             </div>
-
+            <% } %>
         </div>
     </div>
     
 </body>
+<script src="/js/map.js"></script>

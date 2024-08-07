@@ -389,6 +389,204 @@ Change the class and name for each input in that HTML code we copied and pasted 
 
 
 
+ *** 4.) Image upload feature: ***
+See till now we can't upload the pictures, we can only provide the link of image. But we will face two issues if we try to upload pictures i) our form is not capable of taking pictures ii) Our mongoDb database is not capable of storing files/images.
+What we have to do?
+i) Will make our form capable to take files/images as input.
+ii) We will use a third-party free services where our images will be uploaded/saved. And then that 3rd-party service will provide us a link, and we will store that link in our MongoDb database. 
+
+
+i) Making form capable to take files/images as input. 
+enctype="multipart/form-data" this will be added as arguments in the new/edit form. This will make our form capable to take input as files/images. Also change the input type of image from text-to-file. 
+
+Now change the route of (/new, post) in listingRoute, this is to get to know what will happen when we upload a new image. And empty object will show on screen, remember it is not storing in database now as we have changed the code in listingRoute.js for a new listing. Because we have not used parser that is multer to understand form data.
+
+* MULTER * : npm third party library to parse form data. 
+npm i multer
+const multer = require('multer');    // inside listingRoute.js. Multer will help to parse the form data. 
+const upload = multer({dest: 'uploads/'}); // inside listingRoute.js. upload will store these files in a uploads folder.Also, add a middleware upload.single('x[image]') and res.send(req.file);
+See, listingRoute and new.ejs for more details. 
+
+parsing: It is a process to change the form of data so that it becomes easy to understand and perform various operations on it.
+
+
+
+ii) Uploading data on cloud server for free : Cloudinary.
+Make an account on this platform and you will have to find various types of credentials like API keys, secret key etc.
+
+NOTE: We will use credentials in our code but Never save any type of credential on gitHub or when you are using the things on production level. For now we are in development phase. Production phase means the code whose output is going to be visible to the users. 
+
+
+.env file: The file to store environment variables(the variables/things used in our code, but these things are secret and we don't want to share them with anyone). This file work on key=value pairs remember nothing else will be used but only the key=value pairs will be stored, no space, no-commas, nothing, just KEY=value then next line then KEY=value.
+
+* dotenv * : npm third party library, to access environment variables from env file.
+npm i dotenv
+
+// Initially the below 3-things will be stored in .env file. 
+CLOUD_NAME
+CLOUD_API_KEY
+CLOUD_API_SECRET
+
+
+* Two npm libraries to work with cloudinary and multer means to parse form data which contains images/files and store them to cloudinary. 
+* npm install cloudinary@1.41.0 * 
+* npm i multer-storage-cloudinary * 
+
+cloudConfig.js // This file will contain the configurations, means the code to make a connection b/w our backend files and cloudinary database. 
+
+Import the storage and cloudinary in listingRoute.js and adjust the path as "storage" as multer will update the things there in the storage of cloudinary.
+
+Till now what we have done, now our form is able to take files/images as input. That data can be parsed with the help of multer and saved in cloudinary cloud storage. 
+
+
+** Now **
+Modify image in schema.
+updating listingRoute.js and controllers >> listing.js. Also update the defualt init data and index.js and show.ejs so that they can access the files properly.
+
+
+---- Future: -------
+functionalities to add in future: 
+i - Multiple images for same listing.
+ii - Add a cap on image size. 
+And many more...
+
+
+Update Edit page:
+Same as we done with new.ejs and all the functinalities in the controllers >> listing.js.
+Showing the previously added image on the edit page but remember in low quality because we don't want to render the high quality pictures again and again. Cloudinary provide this feature as well. 
+What we will do? 
+Inside controllers >> listing.js, We will simply create a new variable which will store the updated value of image url and pass it as an argument to the edit form. and use this updated url in edit.ejs form.
+
+
+
+
+
+
+//                           -------------------- Phase-3 (Part-b) ---------------------------
+
+1.) Implement Maps Feature in our Website:
+ ** We will use "MapBox" free maps api **
+
+a) 
+i) Copy the default public token and use it in our .env file. See this token is not that much secure, also it is public but still we will use it in .env file because we don't want to share any kind of private data with public.
+
+ii) cdn links of css and js files added in boilerplate code
+iii) add a div with an id "map" in show.ejs. 
+iv) public >> js >> map.js : put your javascript code here in this file, the same code written in the documentation for "mapbox-gl-js". Write CSS for map in public >> style.css
+v) Remember one thigs these environment variables are accessible in "ejs" files but not accessible in public files. So, we will access the mapToken in the JS code written in public folder for map. We can create a script in show.ejs and create a variable which will store that accessToken and that variable will be accessible in public files/folders as well. Also include this file in show.ejs because at the end we want to show the map on show.ejs: <script src="/js/map.js"></script>
+
+b) 
+Geocoding: It is the process of converting text-based addresses into geographic-coordinates and vice-versa.
+Forward Geocoding converts text to geolocation. And, backward do vice-versa.
+
+Go to Github >> mapbox sdk and then download using the below code in current directory:
+npm install @mapbox/mapbox-sdk
+
+
+Then, get the below code :
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.x.location,
+        limit: 1
+      })
+        .send();
+console.log(response.body.features[0].geometry);
+// -- Here limit show the number of geo-coordinates because there could be multiple coordinates for the same input like for India/NewDelhi there could be many coordinates. -- query value will be the input of location from, form of "new.ejs". 
+
+Q: We want whenever we try to create a new listing we print the coordinates of location entered. 
+-- Go to controllers >> listings.js. 
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({accessToken: mapToken});
+The upper things are available in documentation on github sdk of mapbox. 
+-- update create listing. 
+
+Q: Now we want whenever use enter a location while creating a listing, we store the coordinates of that location in the collection of listing. 
+-- use Mongoose geoJson: This is a format in mongoose to store geographic coordinates. We will use this. 
+Go on website of mongoose geoJSON and copy the below code and use in the models >> listing.js. Means we are actually updating the strucute of our documents. 
+geometry: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  }
+
+-- Go to controllers >> listing.js 
+newListing.geometry = response.body.features[0].geometry; 
+
+c) Using Mapbox Marker
+This will help us to add a marker to the location where our hotel/property/listing actually present. 
+-- https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/  : go to this link and use the below code. 
+const marker1 = new mapboxgl.Marker()
+        .setLngLat([12.554729, 55.70651])    // We will get the values of these longitue and latitude from the database documents of listing >> geometry. There we store coordinates. 
+        .addTo(map);   // Then we are adding this to the map. 
+
+Use the above code in public >> js >> map.js as our JS logic to show map is there. But remember one thing we can't directly access the database or any other things in public files. So, as we are requiring this public >> map.js file in views >> listings >> show.ejs. So, what we will do ? We will create a variable in show.ejs that variable will store the value of coordinates from DB and use this variable. 
+
+const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>; // This is show.ejs;
+
+
+Q: Whenever someone hover/click on the location marker, he/she gets the location of the property/listing.
+-- Use MapBox popups. 
+.setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>")) // Use this code in the map.js before addTo(map); 
+
+
+
+
+
+
+
+
+//                           -------------------- Phase-3 (Part-c) ---------------------------
+Design imporovement. 
+
+
+//                           -------------------- Phase-3 (Part-d) ---------------------------
+1.)
+MongoDB Atlas:
+Shifting our Database from our local machine to cloud. Simply go to MongoDb Atlas website and follow the steps. 
+-- Remember while creating a new cluster (simply the place on cloud/internet where your data will be stored), you will get a username and password, write it somewhere because lateron, we will use it. 
+-- mongodb+srv://ashishredhu5810:<password>@cluster0.00eer.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+You have to replace the <password> in the above string with your password that you saved. 
+-- Store the upper updated string in environment variable. Go to "app.js" here we will use this environment variable of MongoDb Atlas to connect to Database rather than the local MongoDB database url. 
+-- Run app.js
+
+* Note: As we have shifted our MongoDB url from local to cloud, so it will be empty, user=0, reviews=0, listings=0;
+
+
+2.) 
+Mongo Session Storage: 
+Till now the session information was stored in our local machine's storage. But now we will use MongoDB Atlas to store the session info. And, as we all know local storage is good during development and debuggin, not for deployement.  
+-- npm i connect-mongo
+// in app.js
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl, // this is url of cloud storage where database is present. 
+  crypto: {
+    secret: "mysupersecretcode"
+  },
+  touchAfter: 10*60, // This is is seconds. Means if nothing has been updated in database then don't logout or don't do anything with the page, even when the user refresh or close the page. Usually we set it to 24hrs = 24*60*60. But here I provided only 10mins = 10*60 in seconds. 
+});
+store.on("error", ()=>{
+  console.log("Error in MONGO SESSION STORE", err);
+})
+pass this store into "sessionOptions" ;
+
+* Note: After this we can notice one new collection named "sessions" in MongoDB Atlas. 
+
+// Remember to add this thing in package.json inside the first object. 
+"engines": {
+  "node": "version of node you have"
+}
+
+
+
 
 
 

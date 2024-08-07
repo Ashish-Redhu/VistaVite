@@ -125,6 +125,10 @@ body{
 }
 
 
-
+/* Map styling: */
+#map{
+    height: 50vh;
+    width: 50vw;
+}
 
 

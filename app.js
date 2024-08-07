@@ -1,4 +1,6 @@
-const express = require("express");
+require('dotenv').config();
+
+const express = require("express"); 
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override"); // to make requests other than GET and POST.
@@ -9,16 +11,31 @@ const listingRoute = require("./routes/listingRoute.js");
 const reviewRoute = require("./routes/reviewRoute.js");
 const userRoute = require("./routes/userRoute.js");
 const session = require("express-session");
+const MongoStore = require('connect-mongo'); // To store session info in MongoDB Atlas. 
 const flash = require("connect-flash");
 const User = require("./models/user.js"); // This is User model not route.
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { constants } = require('buffer');
 
 // Setting up an express app.
 const app = express();
 const PORT = 9000;
 app.listen(PORT, ()=>{
     console.log(`Server is listening on http://localhost:${PORT}`);
+})
+
+// Connecting with database 'wanderlust'
+const dbUrl = process.env.ATLASDB_URL;
+async function main(){
+    await mongoose.connect(dbUrl);
+}
+main()
+.then(()=>{
+    console.log("Connected to database wanderlust");
+})
+.catch((err)=>{
+    console.log("Some error in connection", err);
 })
 
 // This is for telling to NodeJS, "hey, view engine is ejs. So, Node view engine(ejs) will look for views in the view folder whose path we set in second line."
@@ -49,9 +66,22 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
 
+// The below code is to store session data in Cloud Store. 
+const store = MongoStore.create({
+  mongoUrl: dbUrl, // this is url of cloud storage where database is present. 
+  crypto: {
+    secret: "mysupersecretcode"
+  },
+  touchAfter: 10*60, // This is is seconds. Means if nothing has been updated in database then don't logout or don't do anything with the page, even when the user refresh or close the page. Usually we set it to 24hrs = 24*60*60. But here I provided only 10mins = 10*60 in seconds. 
+});
+
+store.on("error", ()=>{
+    console.log("Error in MONGO SESSION STORE", err);
+  })
 
 // Include session and cookies.
 const sessionOptions = {
+    store, 
     secret: "mysupersecretkey", // we will change it later.
     resave: false,
     saveUninitialized: true,
@@ -118,18 +148,6 @@ app.use((err, req, res, next)=>{
 })
 
 
-
-// Connecting with database 'wanderlust'
-async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-}
-main()
-.then(()=>{
-    console.log("Connected to database wanderlust");
-})
-.catch((err)=>{
-    console.log("Some error in connection", err);
-})
 
 
 

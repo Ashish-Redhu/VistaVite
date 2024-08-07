@@ -12,12 +12,8 @@ const listingSchema = new Schema({
     },
     description: String, 
     image: {
-        type: String,
-
-        default: "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsJTIwaG90ZWx8ZW58MHx8MHx8fDA%3D",
-        set: function(v) {
-            return v || this.default;
-        }
+        url: String, 
+        filename: String
     },
     price: Number,
     location: String, 
@@ -31,7 +27,18 @@ const listingSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId, 
         ref: "User"
-    }
+    },
+    geometry: {
+        type: {
+          type: String, // Don't do `{ location: { type: String } }`
+          enum: ['Point'], // 'location.type' must be 'Point'
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: true
+        }
+      }
 });
 // So, image property me kya kiya ke bhai agar koi bhi value provided nahi hoti h to default value dal do image me. Else agar koi value "v" provide hoti hai, to usse return kar do.
 

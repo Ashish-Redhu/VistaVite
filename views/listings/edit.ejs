@@ -7,7 +7,7 @@
     <!-- offset-2, means we want to give spacing from left side. -->
     <div class="col-8 offset-2">
     <h1 style="margin-top: 2rem">Edit the Listing</h1>
-    <form action="/listings/<%=listingdata.id%>/edit?_method=PUT" method="POST" style="margin-top: 2rem;" class="needs-validation" novalidate>
+    <form action="/listings/<%=listingdata.id%>/edit?_method=PUT" method="POST" style="margin-top: 2rem;" class="needs-validation" novalidate enctype="multipart/form-data">
         <div class="form-group mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" name="x[title]" id="title" value="<%=listingdata.title%>" class="form-control" required>
@@ -27,12 +27,13 @@
            </div>
         </div>
         
+        <div class="mb-3">
+            Original Listing Image <br>
+            <img src="<%=originalImageUrl%>" alt="previously added image">
+        </div>
         <div class="form-group mb-3">
-            <label for="image" class="form-label">Image URL</label>
-            <input type="text" name="x[image]" id="image" value="<%=listingdata.image%>" class="form-control" required>
-            <div class="invalid-feedback">
-                Image URL is mendatory.
-           </div>
+            <label for="image" class="form-label">Upload New Image</label>
+            <input type="file" name="x[image]" id="image" class="form-control">
         </div>
 
 

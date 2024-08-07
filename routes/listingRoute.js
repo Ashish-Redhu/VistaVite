@@ -4,6 +4,9 @@ const wrapAsync = require("../utils/wrapAsync.js");
 // const Listing = require("../models/listing.js");
 const {isLoggedIn, isOwner, validateListing} = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
+const multer = require('multer');
+const {storage} = require("../cloudConfig.js");
+const upload = multer({storage});
 
 //1.) Show all the listings/entries/hotels.
 router.get("/", wrapAsync(listingController.index));   // wrapAsync is for unknown/unexpected error handling.
@@ -15,7 +18,11 @@ router.get("/", wrapAsync(listingController.index));   // wrapAsync is for unkno
 router
 .route("/new")
 .get(isLoggedIn, listingController.renderNewForm) //2.) Create a new listing, render form.
-.post(validateListing, wrapAsync(listingController.createANewListing)) //3.) To create a new listing.
+.post(upload.single('x[image]'),
+    validateListing,
+    wrapAsync(listingController.createANewListing)
+) //3.) To create a new listing.
+
 
 router
 .route("/:id")
@@ -25,7 +32,11 @@ router
 router
 .route("/:id/edit")
 .get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm)) // 5.) Showing form to Edit a listing:
-.put(isLoggedIn, isOwner, validateListing, wrapAsync(listingController.updateListing)) //6.) update listing.
+.put(isLoggedIn, 
+    isOwner, 
+    upload.single('x[image]'), 
+    validateListing, 
+    wrapAsync(listingController.updateListing)) //6.) update listing.
 
 module.exports = router;
 

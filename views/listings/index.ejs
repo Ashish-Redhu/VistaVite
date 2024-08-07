@@ -8,7 +8,7 @@
         <!-- <div class="col mb-4"> -->
             <a href="/listings/<%= list._id %>" class="listing-link text-decoration-none mb-4">
                 <div class="listing-card card">
-                    <img src="<%= list.image %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
+                    <img src="<%= list.image.url %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
                     <div class="card-body">
                         <h5 class="card-title"><%= list.title %></h5>
                         <p class="card-text">&#8377; <%= list.price.toLocaleString('en-IN') %> / night</p>

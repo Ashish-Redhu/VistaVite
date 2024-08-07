@@ -1,6 +1,11 @@
 // All the controllers/functions related to listings will reside here. 
 const Listing = require("../models/listing.js");    // Here we have required the model of listing to perform CRUD.
 
+// The below 3-things are for using geoCoding of mapbox. 
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({accessToken: mapToken});
+
 //1.)  This is for showing all the listings.
 module.exports.index = async (req, res)=>{
     const allListings = await Listing.find({});
@@ -15,6 +20,13 @@ module.exports.renderNewForm = (req, res)=>{
 
 // 3.) To create a new listing.
 module.exports.createANewListing = async(req, res)=>{
+    // This is for maps location to coordinates converter. 
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.x.location,   // This will take input from our form location. 
+        limit: 1                      // This limit:1 means it will show only a single pair of longitue, latitude.
+      })
+        .send();
+// console.log(response.body.features[0].geometry);
    
     //i) Not a modern thing to use .then(), .catch();
     // .then(()=>{
@@ -36,7 +48,11 @@ module.exports.createANewListing = async(req, res)=>{
 
 
     // iii) best way. async-await + error handling.
+
+    /* 2.
     console.log(req.body);
+    */
+
     // if(!req.body.x){
     //     throw new ExpressError(400, "Send valid data for listing");
     // }
@@ -50,10 +66,16 @@ module.exports.createANewListing = async(req, res)=>{
         // }
 
     // ::::: More better way using middleware. ::::::
+    
+        // url and filename we will get from the image we are storing on Cloudinary. 
+        let url = req.file.path;
+        let filename = req.file.filename;
         const newListing = new Listing(req.body.x);
+        newListing.image = {url, filename};
         newListing.owner = req.user._id;    // Storing the owner as well with each listing.
-        await newListing.save();
-
+        newListing.geometry = response.body.features[0].geometry; // Storing the geoCoordinates of location entered by user. The location has been converted to Geocoordinates by upper give code of MapBox already. 
+        let savedListing =  await newListing.save();
+        console.log("----- ", savedListing);
         // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else.
         req.flash("success", "New Listing Created!");
         res.redirect("/listings");
@@ -94,7 +116,9 @@ module.exports.renderEditForm = async (req, res)=>{
     //             req.flash("error", "You must be loggedin to create a new listing");
     //             return res.redirect("/login");
     //         }
-    res.render("../views/listings/edit.ejs", {listingdata});
+    let originalImageUrl = listingdata.image.url;
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/h_300,w_250");
+    res.render("../views/listings/edit.ejs", {listingdata, originalImageUrl});
 }
 
 //6.) To finally update the listing.
@@ -106,7 +130,15 @@ module.exports.updateListing = async (req, res)=>{
     //    throw new ExpressError(400, "Send valid data for listing");
     // }
     // await Listing.findByIdAndUpdate(id, req.body.x);  way-1
-    await Listing.findByIdAndUpdate(id, {...req.body.x}); // way-2
+    let tempListing = await Listing.findByIdAndUpdate(id, {...req.body.x}); // way-2
+    if(typeof req.file != "undefined")
+    {
+        let url = req.file.path;
+        let filename = req.file.filename;
+        tempListing.image = {url, filename};
+        await tempListing.save();
+    }
+    
     console.log("Successfully updated");
     req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);
