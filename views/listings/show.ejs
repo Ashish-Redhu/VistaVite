@@ -5,120 +5,89 @@
     // These coordinates are getting fetched from DB and used by map.js to show a Marker.
 </script>
 <body>
-    <div class="row mt-3">
-        <div class="col-10 offset-2">
-            <h2><%=listing.title%></h2>
-    
-            <div class="card col-8 rounded-5 mb-3">
-                <img class="card-img-top show-img" src="<%=listing.image.url%>" alt="Card image cap">
-                <div class="card-body">
-                  <h4 class="card-text" style="color: black;">Owner: <%=listing.owner.username%>  </h4>
-                  <p class="card-text" style="color: black;"> <%=listing.description%>  </p>
-                  <p class="card-text price"> &#8377; <%=listing.price.toLocaleString('en-IN')%> / week </p>
-                  <p class="card-text"> <%=listing.location%> </p>
-                  <p class="card-text"> <%=listing.country%> </p>
-                </div>
-
-                <!-- 1st condition check either the user id loggedIn or not. 2nd condition check for it's ownership. -->
-                <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
+    <div class="showpage">
+        <h2><%=listing.title%></h2>
+        <!-- Cardbox start. -->
+        <div class="cardbox">
+            <img src="<%=listing.image.url%>" alt="Card image cap">
+            <div class="cardbody">
+                <h4>Owner: <%=listing.owner.username%> </h4>
+                <p><%=listing.description%> </p>
+                <p>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</p>
+                <p><%=listing.location%></p>
+                <p><%=listing.country%></p>
+            </div>
+            <!-- 1st condition check either the user is loggedIn or not. 2nd condition checks for ownership. -->
+            <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
                 <div class="buttoncontainer mb-2">
                     <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
                     <br>
-                   <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
-                       <button class="btn btn-danger">Delete</button>
-                   </form>
+                    <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
-                <% } %>
-            </div>
+            <% } %>
+        </div>
+        <!-- Cardbox end. -->
 
-            <!-- To show Map. -->
-             <div class="col-8 mb-3">
-                <h3>Locate " <%=listing.title%> " on map</h3>
-                <div id="map"></div>
+        <!-- To show Map. -->
+        <div class="mapbox">
+            <h3>Locate "<%=listing.title%>" on map</h3>
+            <div id="map"></div>
+        </div>
 
-             </div>
-            
-            
-
-            <!-- Show the "Add Review" form only when the user is loggedIn. "currUser" is the local variable inside "app.js" middleware storing it. -->
-            <% if(currUser) {%>
-            <div class="col-8 mb-3">
+        <!-- Review box. -->
+        <% if(currUser) {%>
+            <div class="newreviewbox">
                 <hr>
                 <h4>Leave a Review</h4>
                 <form action="/listings/<%=listing.id%>/reviews" method="POST" class="needs-validation" novalidate>
-                    <!-- <div class="mb-3 mt-3"> -->
-                        <!-- label is set on the basis of id. -->
-                         <!-- name is for accessing the things in backend. -->
-                        <!-- <label for="rating" class="form-label">Rating</label> -->
-                       <!-- <input type="range" name="review[rating]" id="rating" min="1" max="5" class="form-range"> -->
-                    <!-- </div> -->
-                    <div class="mb-3 mt-3">
-                    <fieldset class="starability-slot">
-                        <!-- <legend>First rating:</legend> -->
-                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                        <label for="first-rate1" title="Terrible">1 star</label>
-                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                        <label for="first-rate2" title="Not good">2 stars</label>
-                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                        <label for="first-rate3" title="Average">3 stars</label>
-                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                        <label for="first-rate4" title="Very good">4 stars</label>
-                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                        <label for="first-rate5" title="Amazing">5 stars</label>
-                      </fieldset>
+                    <div class="stars">
+                        <fieldset class="starability-slot">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
                     </div>
-
-
-                    <div class="mb-3 mt-3">
+                    <div class="comments">
                         <label for="comment" class="form-label">Comments</label>
                         <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
                         <div class="invalid-feedback">
                             Please add some comments.
-                      </div>
+                        </div>
                     </div>
                     <button class="btn btn-outline-dark">Submit</button>
                 </form>
             </div>
-            <% }%>
+        <% } %>
+        <!-- Reviewbox ended.  -->
 
-            <!-- To Show all the reviews -->
-           <% if(listing.reviews.length > 0) {%>
-            <div class="col-8 mt-3 mb-3 reviews row">
+        <!-- To Show all the reviews -->
+        <% if(listing.reviews.length > 0) {%>
+            <div class="reviewsbox">
                 <hr>
                 <h4>All Reviews</h4>
-                <!-- <p><%=listing.reviews%></p> -->
-
-                <!-- Way-1: wrong-->
-                <!-- <%for(list of listing.reviews){%>
-                    <p><%=list.comment%></p>
-                <%}%> -->
-
-                <!-- Way-2: By populating listing on the basis of reviews. -->
-                <!-- But there is an issue with way-1, way-1 would be able to print the reviews only if the review object is actually present inside the listing. But the object of review is not present in listing, only it's oject-id is present. So, wherever we are calling show.ejs and passing listing inside it. We have to populate it. All other things are same. Populate simply expand the things/object review. -->
-                <!-- <%for(list of listing.reviews){%>
-                    <p><%=list.comment%></p>
-                <%}%> -->
-
-                <%for(review of listing.reviews){%>
-                <div class="card col-5 mb-3 ms-3">
-                    <div class="card-body">
-                      <h5 class="card-title">@ <%= review.author.username %></h5>
-                      <p class="starability-result card-text" data-rating="<%=review.rating%>"></p>    
-                      <!-- To show the stars statically in the added comments. -->
-                      <p class="card-text"><%=review.comment%></p>
-                      <!-- <p class="card-text"><%=review.rating%> stars</p> -->
+                <% for(review of listing.reviews) { %>
+                    <div class="reviewCardBody">
+                        <h5 class="reviewTitle">@ <%= review.author.username %></h5>
+                        <p class="starability-result reviewRating" data-rating="<%=review.rating%>"></p>    
+                        <p class="comment"><%=review.comment%></p>
+                        <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-3">
+                            <button class="btn btn-sm btn-dark">Delete</button>
+                        </form>
                     </div>
-
-                    <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-3">
-                        <button class="btn btn-sm btn-dark">Delete</button>
-                      </form>
-                </div>
-                <%}%> 
+                <% } %>
             </div>
-            <% } %>
-        </div>
+        <% } %>
     </div>
-    
+    <!-- Show page ended. -->
 </body>
 <script src="/js/map.js"></script>

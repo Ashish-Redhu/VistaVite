@@ -602,3 +602,13 @@ iv) Adjust show page.
 
 
 
+//                          ---------------------- Change-2: -------------------------
+i) Adding responsiveness in showpage. 
+ii) Adding more beautification on index page. 
+Will do the upper 2-things. 
+
+
+
+
+
+

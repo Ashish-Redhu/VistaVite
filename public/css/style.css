@@ -139,6 +139,15 @@ body{
 }
 
 
+/* Adding responsiveness: */
+@media (max-width: 480px) {
+   .showpage{
+    margin-left: 0.1rem;
+   }
+  }
+
+
+
 /* Map styling: */
 #map{
     height: 50vh;
