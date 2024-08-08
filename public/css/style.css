@@ -108,22 +108,18 @@ body{
 
 
 /* show.ejs styling */
-.show-img{
-    height: 40vh;
+.cardBox{
+    border: 0.5px solid rgb(212, 212, 212);
+    border-radius: 1%;
+    margin-bottom: 1rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adjust the values as needed */
 }
-.card-body{
-    margin-bottom: 0.7rem;
+.cardBox p{
+    margin: 3px;
 }
-.card-body p{
-    margin-bottom: 0.2rem;
-    margin-left: 1rem;
-}
-.card-body p.price{
-    border-top: 0.2px solid rgb(166, 166, 166);
-    width: 15rem;
-}
-.buttoncontainer{
+.buttonContainer{
     margin-top: 1rem;
+    margin-bottom: 0.1rem;
     display: flex;
 }
 .button1 a{
@@ -131,7 +127,6 @@ body{
 }
 .btn.button1{
     margin-right: 2rem;
-
 }
 .btn.button1 a:hover{
     color: inherit;
@@ -139,13 +134,67 @@ body{
 }
 
 
+
 /* Adding responsiveness: */
+
+/* 1.) Mobile devices (portrait and landscape) */
 @media (max-width: 480px) {
-   .showpage{
-    margin-left: 0.1rem;
-   }
+    /* 1.a Card. */
+    .showPage {
+        width: 90vw;
+        margin: auto; /* This is used to adjust left-right margin equal.  */
+    }
+    .showPage .cardBox{
+        border-radius: 1%;
+    }
+    .showPage .cardBox .cardImage{
+        width: 89.5vw;     /* Adjust image width along with showpage width. */
+        height: 40vh;
+    }
+    .showPage .cardBox .cardBody{
+        margin: auto 0.3rem;
+    }
+    .showPage .cardBox .buttonContainer button{
+        padding: 5px 10px; /* Adjust padding as needed */
+        font-size: 0.875rem; /* Adjust font size */
+        border-radius: 0.25rem; /* Optional: Adjust border radius for rounded corners */
+    }
+
+    /* 1.b */
+    .mapBox{
+        width: 90vw;
+    }
+    .mapBox #map{
+        width: 90vw;
+    }
+
+    /* 1.c */
+    .newreviewbox form button{
+        margin-top: 0.5rem;
+    }
+
+    /* 1.d */
+    .reviewsbox .reviewCardBody{
+        border: 0.5px solid rgb(212, 212, 212);
+        border-radius: 1%;
+        margin-bottom: 1rem;
+    }
   }
 
+  /* Tablets (portrait and landscape) */
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Styles for tablets */
+  }
+  
+  /* Small laptops and above */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    /* Styles for small laptops */
+  }
+  
+  /* Large laptops and desktops */
+  @media (min-width: 1025px) {
+    /* Styles for large laptops and desktops */
+  }
 
 
 /* Map styling: */

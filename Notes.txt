@@ -423,9 +423,9 @@ NOTE: We will use credentials in our code but Never save any type of credential 
 npm i dotenv
 
 // Initially the below 3-things will be stored in .env file. 
-CLOUD_NAME
-CLOUD_API_KEY
-CLOUD_API_SECRET
+Cloudname
+CloudApiKey
+cloudApiSecret
 
 
 * Two npm libraries to work with cloudinary and multer means to parse form data which contains images/files and store them to cloudinary. 

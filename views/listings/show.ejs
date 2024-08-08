@@ -5,21 +5,21 @@
     // These coordinates are getting fetched from DB and used by map.js to show a Marker.
 </script>
 <body>
-    <div class="showpage">
+    <div class="showPage">
         <h2><%=listing.title%></h2>
         <!-- Cardbox start. -->
-        <div class="cardbox">
-            <img src="<%=listing.image.url%>" alt="Card image cap">
-            <div class="cardbody">
-                <h4>Owner: <%=listing.owner.username%> </h4>
+        <div class="cardBox">
+            <img class="cardImage" src="<%=listing.image.url%>" alt="Card image cap">
+            <div class="cardBody">
+                <h6>Owner: <%=listing.owner.username%> </h6>
                 <p><%=listing.description%> </p>
-                <p>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</p>
+                <p> <b>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</b></p>
                 <p><%=listing.location%></p>
                 <p><%=listing.country%></p>
             </div>
             <!-- 1st condition check either the user is loggedIn or not. 2nd condition checks for ownership. -->
             <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
-                <div class="buttoncontainer mb-2">
+                <div class="buttonContainer">
                     <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
                     <br>
                     <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
@@ -31,8 +31,8 @@
         <!-- Cardbox end. -->
 
         <!-- To show Map. -->
-        <div class="mapbox">
-            <h3>Locate "<%=listing.title%>" on map</h3>
+        <div class="mapBox">
+            <h6>Locate "<%=listing.title%>" on map</h6>
             <div id="map"></div>
         </div>
 
@@ -40,7 +40,7 @@
         <% if(currUser) {%>
             <div class="newreviewbox">
                 <hr>
-                <h4>Leave a Review</h4>
+                <h6>Leave a Review</h6>
                 <form action="/listings/<%=listing.id%>/reviews" method="POST" class="needs-validation" novalidate>
                     <div class="stars">
                         <fieldset class="starability-slot">
@@ -80,7 +80,7 @@
                         <h5 class="reviewTitle">@ <%= review.author.username %></h5>
                         <p class="starability-result reviewRating" data-rating="<%=review.rating%>"></p>    
                         <p class="comment"><%=review.comment%></p>
-                        <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-3">
+                        <form action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mb-1">
                             <button class="btn btn-sm btn-dark">Delete</button>
                         </form>
                     </div>
