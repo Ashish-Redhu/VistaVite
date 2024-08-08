@@ -50,6 +50,12 @@ body{
     display: flex;
     align-items: center;
 } 
+.f-info-socials a{
+    text-decoration: none;
+    color: black;
+}.f-info-socials a:hover{
+    transform: scale(1.2);
+}
 .f-info-socials i{
     margin: auto 0.5rem;
 }
@@ -103,10 +109,18 @@ body{
 
 /* show.ejs styling */
 .show-img{
-    height: 30vh;
+    height: 40vh;
+}
+.card-body{
+    margin-bottom: 0.7rem;
 }
 .card-body p{
     margin-bottom: 0.2rem;
+    margin-left: 1rem;
+}
+.card-body p.price{
+    border-top: 0.2px solid rgb(166, 166, 166);
+    width: 15rem;
 }
 .buttoncontainer{
     margin-top: 1rem;

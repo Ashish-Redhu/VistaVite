@@ -591,4 +591,14 @@ pass this store into "sessionOptions" ;
 
 
 
+//                           -------------------- Change-1: ---------------------------
+i) "/" root path adjusted. Now "/" means "/listings"
+ii) navbar adjusted. all listings removed. 
+iii) footer updated. remove fb, insta, twitter and added github, linkedin, leetcode links with icons. 
+icons used are of font-awesome.
+iv) Adjust show page. 
+
+
+
+
 

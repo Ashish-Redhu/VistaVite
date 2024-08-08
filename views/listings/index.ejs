@@ -1,8 +1,6 @@
 <% layout("../layouts/boilerplate") %>
 <body>
     
-    <h1 class="mt-4">All Listings</h1>
-
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
         <% for (list of allListings) { %>
         <!-- <div class="col mb-4"> -->
@@ -11,7 +9,7 @@
                     <img src="<%= list.image.url %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
                     <div class="card-body">
                         <h5 class="card-title"><%= list.title %></h5>
-                        <p class="card-text">&#8377; <%= list.price.toLocaleString('en-IN') %> / night</p>
+                        <p class="card-text">&#8377; <%= list.price.toLocaleString('en-IN') %> / week</p>
                     </div>
                 </div>
             </a>

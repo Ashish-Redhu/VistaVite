@@ -27,6 +27,7 @@ app.listen(PORT, ()=>{
 
 // Connecting with database 'wanderlust'
 const dbUrl = process.env.ATLASDB_URL;
+const secret = process.env.SECRET;
 async function main(){
     await mongoose.connect(dbUrl);
 }
@@ -70,7 +71,7 @@ app.engine("ejs", ejsMate);
 const store = MongoStore.create({
   mongoUrl: dbUrl, // this is url of cloud storage where database is present. 
   crypto: {
-    secret: "mysupersecretcode"
+    secret: secret
   },
   touchAfter: 10*60, // This is is seconds. Means if nothing has been updated in database then don't logout or don't do anything with the page, even when the user refresh or close the page. Usually we set it to 24hrs = 24*60*60. But here I provided only 10mins = 10*60 in seconds. 
 });
@@ -82,7 +83,7 @@ store.on("error", ()=>{
 // Include session and cookies.
 const sessionOptions = {
     store, 
-    secret: "mysupersecretkey", // we will change it later.
+    secret: secret, // we will change it later.
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -127,7 +128,7 @@ app.use((req, res, next)=>{
 
 
 app.get("/", (req, res)=>{
-    res.send("You are in home directory");
+    res.redirect("/listings");
 })
 
 app.use("/listings", listingRoute);
