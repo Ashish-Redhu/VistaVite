@@ -603,12 +603,10 @@ iv) Adjust show page.
 
 
 //                          ---------------------- Change-2: -------------------------
-i) Adding responsiveness in showpage. 
+i) Adding responsiveness in showpage, newListing Form page.. 
 Making show page fro small screens. 
 
-ii) Adding more beautification on index page. 
-Will do the upper 2-things. 
-
+ii) Adding a dropdown 
 
 
 

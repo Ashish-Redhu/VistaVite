@@ -19,3 +19,4 @@
 })()
 
 // Logic of bootstrap form validations.
+

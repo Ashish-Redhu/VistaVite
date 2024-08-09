@@ -1,31 +1,36 @@
 <!-- Navbar using Bootstrap 5.0 -->
+
 <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
     <div class="container-fluid">
         <!-- Navbar brand -->
         <a class="navbar-brand" href="/">
             <i class="fas fa-compass"></i>
         </a>
-        <!-- Navbar toggler button with correct data attributes -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Navbar links and dropdowns -->
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="/listings">Home</a>
-                <a class="nav-link" href="/listings/new">Create A New Listing</a>
-            </div>
 
-            <!-- To show "Signup & Login" or "Logout" -->
-            <div class="navbar-nav ms-auto">
-                <!-- currUser is the res.local.currUser = req.user;  present in the middleware of app.js -->
-                 <!-- This stores the curren user logged in. If not loggedin, it will contain undefined. -->
-                <% if(!currUser) {%>
-                <a class="nav-link active" aria-current="page" href="/signup">SignUp</a>
-                <a class="nav-link" href="/login">Login</a> 
-                <% } else if(currUser) {%>
-                <a class="nav-link" href="/logout">Logout</a> <% }%>
-            </div>
+        <!-- Custom Icon Button -->
+        <div class="dropdown ms-auto">
+            <!-- Check if a user is logged in -->
+            <% if (!currUser) { %>
+                <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="/">Home</a></li>
+                    <li><a class="dropdown-item" href="/login">Login</a></li>
+                    <li><a class="dropdown-item" href="/signup">Create an Account</a></li>
+                    <li><a class="dropdown-item" href="/company/about">About us</a></li>
+                </ul>
+            <% } else { %>
+                <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="/profile">Your Profile</a></li>
+                    <li><a class="dropdown-item" href="/logout">logout</a></li>
+                    <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                    <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
+                </ul>
+            <% } %>
         </div>
     </div>
 </nav>

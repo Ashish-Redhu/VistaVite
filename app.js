@@ -10,6 +10,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingRoute = require("./routes/listingRoute.js");
 const reviewRoute = require("./routes/reviewRoute.js");
 const userRoute = require("./routes/userRoute.js");
+const companyRoute = require("./routes/companyRoute.js");
 const session = require("express-session");
 const MongoStore = require('connect-mongo'); // To store session info in MongoDB Atlas. 
 const flash = require("connect-flash");
@@ -133,7 +134,9 @@ app.get("/", (req, res)=>{
 
 app.use("/listings", listingRoute);
 app.use("/listings/:id/reviews", reviewRoute);
+app.use("/company", companyRoute);
 app.use("/", userRoute);
+
 
 
 // If any of the request doesn't match with url/api, it will be handled here.
