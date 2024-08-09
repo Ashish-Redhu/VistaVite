@@ -132,13 +132,26 @@ body{
     color: inherit;
     text-decoration: none;
 }
-
+/* All reviews */
+.reviewsbox .reviewCardBody{
+    border: 0.5px solid rgb(212, 212, 212);
+    border-radius: 1%;
+    display: flex;
+    flex-direction: column; /* Stack content and button vertically */
+    justify-content: space-between; /* Push content and button apart */
+    margin-bottom: 1rem;
+}
+.reviewsbox .reviewCardBody form button{
+    margin-bottom: 0.2rem;
+}
 
 
 /* Adding responsiveness: */
 
 /* 1.) Mobile devices (portrait and landscape) */
 @media (max-width: 480px) {
+
+                                                        /* ---------- Show Page: -------------- */
     /* 1.a Card. */
     .showPage {
         width: 90vw;
@@ -148,8 +161,9 @@ body{
         border-radius: 1%;
     }
     .showPage .cardBox .cardImage{
-        width: 89.5vw;     /* Adjust image width along with showpage width. */
+        width: 90vw;     /* Adjust image width along with showpage width. */
         height: 40vh;
+        border-radius: 1%;
     }
     .showPage .cardBox .cardBody{
         margin: auto 0.3rem;
@@ -173,28 +187,159 @@ body{
         margin-top: 0.5rem;
     }
 
-    /* 1.d */
-    .reviewsbox .reviewCardBody{
-        border: 0.5px solid rgb(212, 212, 212);
-        border-radius: 1%;
-        margin-bottom: 1rem;
+                                                            /* ---------- Create Listing Page: -------------- */
+    .newListing{
+        width: 90vw  !important;
+        margin: 0 auto  !important;
+        padding: 0 1rem;
     }
+
   }
 
-  /* Tablets (portrait and landscape) */
+/* 2.) Tablets (portrait and landscape)*/
 @media (min-width: 481px) and (max-width: 768px) {
-    /* Styles for tablets */
+                                                        /* ---------- Show Page: -------------- */
+    /* 2.a Card. */
+    .showPage {
+        width: 80vw;
+        margin: auto; /* This is used to adjust left-right margin equal.  */
+    }
+    .showPage .cardBox{
+        border-radius: 1%;
+    }
+    .showPage .cardBox .cardImage{
+        width: 80vw;     /* Adjust image width along with showpage width. */
+        height: 40vh;
+        border-radius: 1%;
+    }
+    .showPage .cardBox .cardBody{
+        margin: auto 0.3rem;
+    }
+    .showPage .cardBox .buttonContainer button{
+        padding: 5px 10px; /* Adjust padding as needed */
+        font-size: 0.875rem; /* Adjust font size */
+        border-radius: 0.25rem; /* Optional: Adjust border radius for rounded corners */
+    }
+     /* 2.b */
+     .mapBox{
+        width: 80vw;
+    }
+    .mapBox #map{
+        width: 80vw;
+    }
+     /* 2.c */
+     .newreviewbox form button{
+        margin-top: 0.5rem;
+    }
+
   }
+
   
-  /* Small laptops and above */
-  @media (min-width: 769px) and (max-width: 1024px) {
-    /* Styles for small laptops */
+/* 3.) Small laptops*/
+@media (min-width: 768px) and (max-width: 1024px) {
+                                                         /* ---------- Show Page: -------------- */
+    /* 3.a Card. */
+    .showPage {
+        width: 70vw;
+        margin: auto; /* This is used to adjust left-right margin equal.  */
+    }
+    .showPage .cardBox{
+        border-radius: 2%;
+    }
+    .showPage .cardBox .cardImage{
+        width: 70vw;     /* Adjust image width along with showpage width. */
+        height: 50vh;
+        border-radius: 2%;
+    }
+    .showPage .cardBox .cardBody{
+        margin: auto 0.5rem;
+    }
+    .showPage .cardBox .buttonContainer button{
+        padding: 5px 10px; /* Adjust padding as needed */
+        font-size: 0.875rem; /* Adjust font size */
+        border-radius: 0.25rem; /* Optional: Adjust border radius for rounded corners */
+    }
+     /* 3.b */
+     .mapBox{
+        width: 70vw;
+    }
+    .mapBox #map{
+        width: 70vw;
+    }
+     /* 3.c */
+     .newreviewbox form button{
+        margin-top: 0.5rem;
+    }
+
+    /* 3.d */
+    .reviewsbox{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
   }
-  
-  /* Large laptops and desktops */
+
+
+/* 4.) Large laptops and desktops */
   @media (min-width: 1025px) {
+                                                        /* ---------- Show Page: -------------- */
     /* Styles for large laptops and desktops */
+    /* 4.a Card. */
+    .cardBox {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .showPage {
+        width: 80vw;
+        margin: auto; /* This is used to adjust left-right margin equal.  */
+    }
+    .showPage .cardBox{
+        border-radius: 2%;
+    }
+    .showPage .cardBox .cardImage{
+        width: 50vw;     /* Adjust image width along with showpage width. */
+        height: 60vh;
+        border-radius: 2%;
+    }
+    .showPage .cardBox .cardBody{
+        margin: auto 0.5rem;
+    }
+    .showPage .cardBox .buttonContainer button{
+        padding: 5px 10px; /* Adjust padding as needed */
+        font-size: 0.875rem; /* Adjust font size */
+        border-radius: 0.25rem; /* Optional: Adjust border radius for rounded corners */
+    }
+
+     /* 4.b */
+     .mapBox{
+        width: 60vw;
+        margin: auto;
+    }
+    .mapBox #map{
+        width: 60vw;
+    }
+     /* 4.c */
+     .newreviewbox form button{
+        margin-top: 0.5rem;
+    }
+     /* 4.d */
+    .reviewsbox{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
   }
+
+
+
+
 
 
 /* Map styling: */
