@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
+const {isLoggedIn} = require("../middleware.js");
 // const ExpressError = require("../utils/ExpressError.js");
 
 const passport = require("passport");
@@ -22,6 +23,9 @@ router
 
 //5.) LogOut
 router.get("/logout", userController.logOut);
+
+//6.) Profile
+router.get("/profile", isLoggedIn, userController.profile);
 
 module.exports = router;
 

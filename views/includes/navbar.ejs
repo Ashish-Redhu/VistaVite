@@ -7,6 +7,10 @@
             <i class="fas fa-compass"></i>
         </a>
 
+
+        <!-- *** Note: This currUser is a variable created in "app.js" this is there in a middleware. -->
+
+
         <!-- Custom Icon Button -->
         <div class="dropdown ms-auto">
             <!-- Check if a user is logged in -->
@@ -25,9 +29,9 @@
                     <i class="fas fa-user"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="/">Home</a></li>
                     <li><a class="dropdown-item" href="/profile">Your Profile</a></li>
                     <li><a class="dropdown-item" href="/logout">logout</a></li>
-                    <li><a class="dropdown-item" href="/settings">Settings</a></li>
                     <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
                 </ul>
             <% } %>

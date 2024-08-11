@@ -11,6 +11,7 @@ const listingRoute = require("./routes/listingRoute.js");
 const reviewRoute = require("./routes/reviewRoute.js");
 const userRoute = require("./routes/userRoute.js");
 const companyRoute = require("./routes/companyRoute.js");
+const paymentRoute = require("./routes/paymentRoute.js");
 const session = require("express-session");
 const MongoStore = require('connect-mongo'); // To store session info in MongoDB Atlas. 
 const flash = require("connect-flash");
@@ -52,7 +53,8 @@ app.set("view engine", "ejs");
 app.set("views", [
     path.join(__dirname, "./views"),
     path.join(__dirname, "./views/listings"),
-    path.join(__dirname, "./views/users")
+    path.join(__dirname, "./views/users"),
+    path.join(__dirname, "./views/payment")
   ]);
 
 
@@ -66,6 +68,7 @@ app.use(methodOverride("_method"));
 
 // To use static files.
 app.use(express.static(path.join(__dirname, "/public")));
+
 app.engine("ejs", ejsMate);
 
 // The below code is to store session data in Cloud Store. 
@@ -135,8 +138,8 @@ app.get("/", (req, res)=>{
 app.use("/listings", listingRoute);
 app.use("/listings/:id/reviews", reviewRoute);
 app.use("/company", companyRoute);
+app.use("/payment", paymentRoute);
 app.use("/", userRoute);
-
 
 
 // If any of the request doesn't match with url/api, it will be handled here.

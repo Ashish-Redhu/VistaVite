@@ -384,7 +384,7 @@ visit: routes >> ... to get Implemented info.
 // vi) 
 Change the class and name for each input in that HTML code we copied and pasted in show.ejs to take input from user.
 
-// Future: i) We can improve the look and feel of stars. ii) we can take the average all the ratings and show it on index.ejs page as well. 
+// Future: i) we can take the average all the ratings and show it on index.ejs page as well. 
 
 
 
@@ -607,6 +607,17 @@ i) Adding responsiveness in showpage, newListing Form page..
 Making show page fro small screens. 
 
 ii) Adding a dropdown 
+
+iii) I want to create two different profiles: a) Normal user b) listing owner. 
+a) Functionalities of normal user: listings=0. Booking functionality will add later. Show listings after clicking on your profile. 
+b) Functionalities of listing owner: listing=0/n. Booking functinality=null. Show listings after clicking on your profile. 
+iii) Type/Role of user added in "model" and "signup" form. 
+
+iii) Now I want to perform something like, whenever someone click on "Your Profile", all the details of user shows on a page. All of his/her listings. And, many more.
+a) Update the database of "user" where we will add the object-id of listings of that particular user. 
+b) Whenever a listing got deleted, it must be deleted from it's Owner's collection, also from 
+
+
 
 
 

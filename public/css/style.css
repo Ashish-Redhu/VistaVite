@@ -35,6 +35,13 @@ body{
 
 
 /* 2.) Footer Styling */
+/* footer{
+    position: sticky;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    margin: 0px;
+} */
 .f-info{
     display: flex;
     height: 8rem;
@@ -194,6 +201,16 @@ body{
         padding: 0 1rem;
     }
 
+
+      /* QR code  */
+      .manualqr{
+        margin-left: 20%;
+    }
+    .manualqr img{
+        height: 50vh;
+        width: 60vw;
+    }
+
   }
 
 /* 2.) Tablets (portrait and landscape)*/
@@ -230,6 +247,16 @@ body{
      /* 2.c */
      .newreviewbox form button{
         margin-top: 0.5rem;
+    }
+
+
+    /* QR code  */
+    .manualqr{
+        margin-left: 35%;
+    }
+    .manualqr img{
+        height: 50vh;
+        width: 40vw;
     }
 
   }
@@ -279,6 +306,15 @@ body{
         margin-bottom: 1rem;
     }
 
+    /* QR code  */
+    .manualqr{
+        margin-left: 35%;
+    }
+    .manualqr img{
+        height: 50vh;
+        width: 30vw;
+    }
+
   }
 
 
@@ -302,7 +338,7 @@ body{
         border-radius: 2%;
     }
     .showPage .cardBox .cardImage{
-        width: 50vw;     /* Adjust image width along with showpage width. */
+        width: 120vw;     /* Adjust image width along with showpage width. */
         height: 60vh;
         border-radius: 2%;
     }
@@ -335,9 +371,16 @@ body{
         margin-bottom: 1rem;
     }
 
+    /* 5.a */
+    /* QR code  */
+    .manualqr{
+        margin-left: 35%;
+    }
+    .manualqr img{
+        height: 60vh;
+        width: 30vw;
+    }
   }
-
-
 
 
 

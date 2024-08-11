@@ -20,10 +20,18 @@
                 <label for="password" class="form-label">Create A Password</label>
                 <input type="password" name="password" id="password" class="form-control" required>
             </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Select Account Type</label>
+                <div>
+                    <input type="radio" name="role" id="user" value="user" required>
+                    <label for="user">Normal User</label>
+                     &nbsp; &nbsp;
+                    <input type="radio" name="role" id="owner" value="owner" required>
+                    <label for="owner">Listing Owner</label>
+                </div>
+            </div>
             <button class="btn btn-success">SignUp</button>
             <p><a class="link-opacity-75" href="/login">Already have an account</a></p>
         </form>
     </div>
 </div>
-
-

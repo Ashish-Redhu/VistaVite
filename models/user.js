@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Listing = require("./listing");
+// Importing models.
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
 
@@ -6,7 +8,18 @@ const userSchema = new Schema({
     email: {
         type: String, 
         required: true
-    }
+    },
+    role: {
+        type: String,
+        enum: ["user", "owner"],
+        required: true
+    },
+    listings: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Listing"
+        }
+    ],
     // Here we don't need to define "username" and "password" by ourself, because passport-local-mongoose will automatically add these fields along with "salting" and "hashing". Passport will add various methods as well in the Schema/class/collection/model/object/document. 
 });
 

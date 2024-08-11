@@ -1,0 +1,64 @@
+<% layout("../layouts/boilerplate") %>
+
+<body>
+<!-- Show page starts -->
+<div class="showPage">
+    <h3>Your Profile</h3>
+       <hr>
+    <!-- <div class="mb-3"> 
+        <h5>Username: <%= currUser.username %></h5>
+        <h5>Email: <%= currUser.email %></h5>
+    </div> -->
+
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body m-1">
+          <h5 class="card-title"><%= currUser.username %></h5>
+          <% if (currUser.role === "user") { %>
+            <h6 class="card-subtitle mb-2 text-body-secondary">A Normal User / Tenant</h6>
+            <p class="card-text">A normal user is an individual who can book properties for specified periods of time.</p>
+          <% } else if(currUser.role === "owner") { %>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Property Owner</h6>
+            <p class="card-text">A property owner is an individual who can list and rent out their houses or rooms for specified periods of time.</p>
+            <% } %>
+          <a href="#" class="card-link"><%= currUser.email %></a>
+        </div>
+      </div>
+
+    <% if (currUser.role === "owner") { %>
+        <div class="newListingbutton">
+            <a href="/listings/new"><button type="button" class="btn btn-primary">Create a new Listing</button></a>
+        </div>
+        <hr>
+    <h4>Your Listings:</h4>
+        <% if (currUser.listings.length === 0) { %>
+            <p>You have not created any listings yet.</p>
+        <% } else { %>
+             <% currUser.listings.forEach(function(listing) { %>
+                   <h4><%= listing.title %></h2>
+   <!-- Cardbox start. -->
+    <div class="cardBox">
+        <img class="cardImage" src="<%=listing.image.url%>" alt="Card image cap">
+        <div class="cardBody">
+            <h6>Owner: <%=listing.owner.username%> </h6>
+            <p><%=listing.description%></p>
+            <p><b>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</b></p>
+            <p><%=listing.location%></p>
+            <p><%=listing.country%></p>
+            <!-- 1st condition checks if the user is logged in, 2nd checks for ownership -->
+       
+                <div class="buttonContainer">
+                    <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
+                    <br>
+                    <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+        </div>
+    </div>
+    <% }); %>
+    <% } %>
+
+<% } %>
+</div>
+</body>

@@ -2,6 +2,8 @@
 <script>
     const mapToken = "<%= process.env.MAP_TOKEN %>";
     const listing = <%- JSON.stringify(listing) %>;
+    // The above listing is used to show the map.
+    
     // These coordinates are getting fetched from DB and used by map.js to show a Marker.
 </script>
 <body>
@@ -17,12 +19,10 @@
                 <p><%=listing.location%></p>
                 <p><%=listing.country%></p>
                 <!-- 1st condition checks if the user is logged in, 2nd checks for ownership -->
-                <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+                <% if(currUser && !currUser._id.equals(listing.owner._id)) { %>
                     <div class="buttonContainer">
-                        <button class="btn btn-dark button1"><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
-                        <br>
-                        <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
+                        <form action="/payment/qr" method="GET">
+                            <button class="btn btn-danger">Book Now</button>
                         </form>
                     </div>
                 <% } %>
@@ -32,13 +32,14 @@
         <!-- Cardbox end. -->
 
         <!-- To show Map. -->
-        <div class="mapBox">
+        <div class="mapBox mb-2">
             <h6>Locate "<%=listing.title%>" on map</h6>
             <div id="map"></div>
         </div>
 
         <!-- Review box. -->
-        <% if(currUser) {%>
+        <!-- If current user is the owner then he can't put a review.  -->
+        <% if(currUser && !currUser._id.equals(listing.owner._id)) {%>
             <div class="newreviewbox">
                 <hr>
                 <h6>Leave a Review</h6>

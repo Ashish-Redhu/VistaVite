@@ -1,5 +1,7 @@
 // All the controllers/functions related to listings will reside here. 
 const Listing = require("../models/listing.js");    // Here we have required the model of listing to perform CRUD.
+const Review = require("../models/review.js");
+const User = require("../models/user.js");
 
 // The below 3-things are for using geoCoding of mapbox. 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
@@ -76,7 +78,12 @@ module.exports.createANewListing = async(req, res)=>{
         newListing.geometry = response.body.features[0].geometry; // Storing the geoCoordinates of location entered by user. The location has been converted to Geocoordinates by upper give code of MapBox already. 
         let savedListing =  await newListing.save();
         console.log("----- ", savedListing);
-        // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else.
+        // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else. 
+        
+        res.locals.currUser.listings.push(savedListing._id);
+        // Optionally, save the updated user if needed
+        await res.locals.currUser.save();
+
         req.flash("success", "New Listing Created!");
         res.redirect("/listings");
     // Now if it throws some error it will go to error handling middleware.
@@ -148,6 +155,9 @@ module.exports.updateListing = async (req, res)=>{
 module.exports.destroyListing = async(req, res)=>{
     const {id} = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);   // This will send the request to "findOneAndDelete" mongoose-middleware. And, this middleware definition must be present just-below the schema which is calling this findbyIdandDelete method. So, here listing-schema. Because on the basis of listing we will find and delete something. But the listing schema is not present in app.js, we are importing it. So, we have to write this mongoose-middleware inside "models >> listing.js".
+    res.locals.currUser.listings = res.locals.currUser.listings.filter(obj => obj._id != deletedListing._id);
+     // Delete all reviews associated with the listing
+     await Review.deleteMany({ listing: id }); 
     console.log("Item deleted");
     console.log(deletedListing);
     req.flash("success", "Listing Deleted!");

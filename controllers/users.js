@@ -1,5 +1,5 @@
 const User = require("../models/user.js"); // It is necessary to import the model, as we will create the object of this model/class and then store in the database. 
-
+const Listing = require('../models/listing');
 //1.) SignUp form.
 module.exports.renderSignUpForm = (req, res)=>{
     res.render("signup.ejs");
@@ -8,8 +8,8 @@ module.exports.renderSignUpForm = (req, res)=>{
 //2.) SignUp after submitting the upper form.
 module.exports.signUp = async(req, res)=>{
     try{
-        let {username, email, password} = req.body; // Here we access the input fields of form with the help of their names, not with their id's. Id's are used to set label for them.
-        const newUser = new User({email, username});
+        let {username, email, password, role} = req.body; // Here we access the input fields of form with the help of their names, not with their id's. Id's are used to set label for them.
+        const newUser = new User({email, username, role});
         const registeredUser = await User.register(newUser, password);  // A new user registered. 
         // As we doing authentication, so using passport that's why we will use "modelname.register()" and we will password seperately not inside the object/document. 
 
@@ -54,4 +54,24 @@ module.exports.logOut =  (req, res, next)=>{
 // It take a callback as an argument and there we can perform certain tasks.
 };
 
+//6.) Profile
+module.exports.profile = async (req, res) => {
+    console.log("Start.........");
+    const user = res.locals.currUser;
 
+    try {
+        const user = await User.findById(req.user._id).populate('listings');
+        // Log user object to ensure it’s populated
+        console.log("User fetched:", user);
+
+        // Update `res.locals.currUser` to include the fully populated user object
+        res.locals.currUser = user;
+
+        console.log("Done.........Profile fetched.");
+        res.render("profile.ejs"); // Render the profile page
+    } catch (err) {
+        console.error("Error fetching user profile:", err);
+        req.flash('error', 'Unable to load profile.');
+        res.redirect('/');
+    }
+};
