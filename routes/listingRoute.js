@@ -11,6 +11,7 @@ const upload = multer({storage});
 //1.) Show all the listings/entries/hotels.
 router.get("/", wrapAsync(listingController.index));   // wrapAsync is for unknown/unexpected error handling.
 
+
 // ::: NOTE :::
 // if you use API which is like "/listings/something", it will not work if it is after "/listings/:id" because listings/id will look for some id. So, always use them before it. Yeah if something related to "listing/id" is there then you can use after it as well.
 

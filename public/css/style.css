@@ -111,6 +111,15 @@ body{
     transition: transform 0.3s ease;
 
 }
+/* Index page stars.  */
+.fa-star {
+    /* color: #e4e5e9; Light gray for unfilled stars */
+    color: rgb(164, 164, 164);
+  }
+  
+  .fa-star.checked {
+    color: #ffd700; /* Gold color for filled stars */
+  }
 
 
 
@@ -393,3 +402,4 @@ body{
 
 
 
+  

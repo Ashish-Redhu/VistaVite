@@ -9,10 +9,42 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({accessToken: mapToken});
 
 //1.)  This is for showing all the listings.
-module.exports.index = async (req, res)=>{
-    const allListings = await Listing.find({});
-    res.render("../views/listings/index.ejs", {allListings});
-}
+module.exports.index = async (req, res) => {
+    try {
+      const sortBy = req.query.sortBy; // 'asc' for low to high, 'desc' for high to low
+  
+      let sortOption = {};
+      if (sortBy === 'asc') {
+        sortOption.price = 1; // Sort by price in ascending order (low to high)
+      } else if (sortBy === 'desc') {
+        sortOption.price = -1; // Sort by price in descending order (high to low)
+      } // If sortBy is undefined or invalid, sortOption remains an empty object
+  
+      // Fetch all listings with populated reviews
+      const allListings = await Listing.find({}).populate('reviews').sort(sortOption);
+  
+      // Calculate average rating for each listing
+      allListings.forEach(listing => {
+        let totalRating = 0;
+        if (listing.reviews.length > 0) {
+          listing.reviews.forEach(review => {
+            totalRating += review.rating;
+          });
+          listing.averageRating = totalRating / listing.reviews.length;
+        } else {
+          listing.averageRating = null; // Or set to 0 if preferred
+        }
+      });
+  
+      res.render("../views/listings/index.ejs", { allListings, sortBy });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Server Error');
+    }
+  };
+  
+
+
 
 //2.)  This is for rendering a form to create a new listing.
 module.exports.renderNewForm = (req, res)=>{

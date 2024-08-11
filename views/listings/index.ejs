@@ -1,20 +1,60 @@
 <% layout("../layouts/boilerplate") %>
 <body>
-    
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
-        <% for (list of allListings) { %>
-        <!-- <div class="col mb-4"> -->
-            <a href="/listings/<%= list._id %>" class="listing-link text-decoration-none mb-4">
-                <div class="listing-card card">
-                    <img src="<%= list.image.url %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= list.title %></h5>
-                        <p class="card-text">&#8377; <%= list.price.toLocaleString('en-IN') %> / week</p>
-                    </div>
+    <!-- Sort by Low to High -->
+    <form action="/listings" method="get" style="display:inline;">
+      <input type="hidden" name="sortBy" value="asc">
+      <button type="submit" <%= sortBy === 'asc' ? 'disabled' : '' %>>Sort by Price: Low to High</button>
+    </form>
+  
+    <!-- Sort by High to Low -->
+    <form action="/listings" method="get" style="display:inline;">
+      <input type="hidden" name="sortBy" value="desc">
+      <button type="submit" <%= sortBy === 'desc' ? 'disabled' : '' %>>Sort by Price: High to Low</button>
+    </form>
+  
+    <!-- Default Order -->
+    <form action="/listings" method="get" style="display:inline;">
+      <input type="hidden" name="sortBy" value="">
+      <button type="submit" <%= !sortBy ? 'disabled' : '' %>>Default Order</button>
+    </form>
+  
+    <% if (!sortBy) { %>
+      <p>Listings in default order</p>
+    <% } else if (sortBy === 'asc') { %>
+      <p>Listings sorted by price: Low to High</p>
+    <% } else if (sortBy === 'desc') { %>
+      <p>Listings sorted by price: High to Low</p>
+    <% } %>
+  
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center mt-5">
+      <% allListings.forEach(listing => { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none mb-4">
+          <div class="listing-card card">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="Card image cap" style="height: 20rem;">
+            <div class="card-body">
+              <h5 class="card-title"><%= listing.title %></h5>
+              <p class="card-text" style="margin-bottom: 0px;">&#8377; <%= listing.price.toLocaleString('en-IN') %> / week</p>
+  
+              <% if (listing.averageRating) { %>
+                <div class="stars">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                    <% if (i <= Math.round(listing.averageRating)) { %>
+                      <span class="fa fa-star checked"></span>
+                    <% } else { %>
+                      <span class="fa fa-star"></span>
+                    <% } %>
+                  <% } %>
                 </div>
-            </a>
-        <!-- </div> -->
-        <% } %>
+                <p><%= listing.averageRating.toFixed(1) %> out of 5 stars</p>
+              <% } else { %>
+                <p>No ratings yet</p>
+              <% } %>
+  
+            </div>
+          </div>
+        </a>
+      <% }) %>
     </div>
-</body>
-
+  
+  </body>
+  
