@@ -12,6 +12,7 @@ const listingSchema = Joi.object({
        price: Joi.number().required().min(0),
        image: Joi.string().allow("", null),
       }).required(),
+      facilities: Joi.array().items(Joi.string()).default([]),
       // This outer required-condition is to check that the complete object should be there. Means it should not be like someone send completely empty object or doesn't send object.
 
 });

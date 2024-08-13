@@ -107,7 +107,8 @@ module.exports.createANewListing = async(req, res)=>{
         const newListing = new Listing(req.body.x);
         newListing.image = {url, filename};
         newListing.owner = req.user._id;    // Storing the owner as well with each listing.
-        newListing.geometry = response.body.features[0].geometry; // Storing the geoCoordinates of location entered by user. The location has been converted to Geocoordinates by upper give code of MapBox already. 
+        newListing.geometry = response.body.features[0].geometry; // Storing the geoCoordinates of location entered by user. The location has been converted to Geocoordinates by upper give code of MapBox already.
+        newListing.facilities = req.body.facilities; // Add facilities from form input
         let savedListing =  await newListing.save();
         console.log("----- ", savedListing);
         // connect-flash to show a pop-up message after saving a listing. Here, we simply create that flash(pop-up message with a key) but how we will show it is defined somewhere else. 
@@ -171,13 +172,17 @@ module.exports.updateListing = async (req, res)=>{
     // await Listing.findByIdAndUpdate(id, req.body.x);  way-1
     let tempListing = await Listing.findByIdAndUpdate(id, {...req.body.x}); // way-2
     if(typeof req.file != "undefined")
-    {
-        let url = req.file.path;
-        let filename = req.file.filename;
-        tempListing.image = {url, filename};
-        await tempListing.save();
-    }
-    
+      {
+          let url = req.file.path;
+          let filename = req.file.filename;
+          tempListing.image = {url, filename};
+          await tempListing.save();
+      }
+      tempListing.facilities.length = 0;
+
+   tempListing.facilities = req.body.facilities; // Update facilities from form input
+   tempListing.save();
+
     console.log("Successfully updated");
     req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);

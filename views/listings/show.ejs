@@ -15,13 +15,29 @@
             <div class="cardBody">
                 <h6>Owner: <%=listing.owner.username%> </h6>
                 <p><%=listing.description%></p>
-                <p><b>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</b></p>
+                <% if(listing.facilities.length>0){%>
+                    <h5>Facilities:</h5>
+                    <div class="facilities-container">
+                        <% listing.facilities.forEach(facility => { %>
+                            <div class="facility-box">
+                                <span class="tick-symbol">&#10003;</span> <%= facility %>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <% } %>
                 <p><%=listing.location%></p>
                 <p><%=listing.country%></p>
+                <p><b>&#8377; <%=listing.price.toLocaleString('en-IN')%> / week</b></p>
                 <!-- 1st condition checks if the user is logged in, 2nd checks for ownership -->
                 <% if(currUser && !currUser._id.equals(listing.owner._id)) { %>
                     <div class="buttonContainer">
                         <form action="/payment/qr" method="GET">
+                            <button class="btn btn-danger">Book Now</button>
+                        </form>
+                    </div>
+                <% } else if(!currUser) { %>
+                    <div class="buttonContainer">
+                        <form action="/login" method="GET">
                             <button class="btn btn-danger">Book Now</button>
                         </form>
                     </div>

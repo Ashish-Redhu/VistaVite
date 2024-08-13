@@ -618,6 +618,9 @@ a) Update the database of "user" where we will add the object-id of listings of 
 b) Whenever a listing got deleted, it must be deleted from it's Owner's collection, also from 
 
 
+** Facilities feature added **
+
+
 
 
 

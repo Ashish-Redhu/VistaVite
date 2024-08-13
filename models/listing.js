@@ -18,6 +18,7 @@ const listingSchema = new Schema({
     price: Number,
     location: String, 
     country: String,
+    facilities: [String], // New field to store facilities as an array of strings
     reviews: [
         {
             type: Schema.Types.ObjectId,

@@ -336,9 +336,7 @@ body{
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-between;
     }
-    
     .showPage {
         width: 80vw;
         margin: auto; /* This is used to adjust left-right margin equal.  */
@@ -347,12 +345,12 @@ body{
         border-radius: 2%;
     }
     .showPage .cardBox .cardImage{
-        width: 120vw;     /* Adjust image width along with showpage width. */
+        width: 50vw;     /* Adjust image width along with showpage width. */
         height: 60vh;
         border-radius: 2%;
     }
     .showPage .cardBox .cardBody{
-        margin: auto 0.5rem;
+        margin: auto 1rem;
     }
     .showPage .cardBox .buttonContainer button{
         padding: 5px 10px; /* Adjust padding as needed */
@@ -403,3 +401,26 @@ body{
 
 
   
+/* Temporary basis: facilities on show page.  */
+.facilities-container {
+    display: flex;
+    flex-wrap: wrap; /*Prevent wrapping to the next line*/
+    gap: 0.2rem; /* Space between items */
+    /* overflow-x: auto; Allows horizontal scrolling if needed */
+}
+
+.facility-box {
+    background-color: #4d975e; /* Green color */
+    color: white;
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-flex; /* Adjusts size according to content */
+    align-items: center;
+    white-space: nowrap; /* Prevent text from wrapping inside the box */
+}
+
+.tick-symbol {
+    font-size: 1em;
+    margin-right: 3px;
+}
+
