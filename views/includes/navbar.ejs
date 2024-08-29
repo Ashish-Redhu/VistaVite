@@ -6,8 +6,8 @@
         <a class="navbar-brand" href="/">
             <i class="fas fa-compass"></i>
         </a>
-        <span><a href="/" style="margin-left: 1rem;">Home</a></span>
-        <span><a href="/company/about" style="margin-left: 2rem;">About us</a></span>
+        <span><a href="/" style="margin-left: 1rem;" class="abouthome-link">Home</a></span>
+        <span><a href="/company/about" style="margin-left: 2rem;" class="abouthome-link">About us</a></span>
 
 
         <!-- *** Note: This currUser is a variable created in "app.js" this is there in a middleware. -->
@@ -21,7 +21,9 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="/">Home</a></li>
+                    <li><a class="dropdown-item d-md-none" href="/">Home</a></li>
+                    <!-- Add About Us link for small screens -->
+                    <li><a class="dropdown-item d-md-none" href="/company/about">About Us</a></li>
                     <li><a class="dropdown-item" href="/login">Login</a></li>
                     <li><a class="dropdown-item" href="/signup">Create an Account</a></li>
                     <li><a class="dropdown-item" href="/company/contact">Contact Us</a></li>
@@ -31,7 +33,9 @@
                     <i class="fas fa-user"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="/">Home</a></li>
+                    <li><a class="dropdown-item d-md-none" href="/">Home</a></li>
+                     <!-- Add About Us link for small screens -->
+                     <li><a class="dropdown-item d-md-none" href="/company/about">About Us</a></li>
                     <li><a class="dropdown-item" href="/profile">Your Profile</a></li>
                     <li><a class="dropdown-item" href="/logout">logout</a></li>
                     <li><a class="dropdown-item" href="/company/contact">Contact Us</a></li>

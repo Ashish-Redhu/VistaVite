@@ -170,10 +170,28 @@ body{
 
 /* Adding responsiveness: */
 
+/* Hide "About Us" link on screens larger than 480px */
+@media (min-width: 480px) {
+    .dropdown-menu .d-md-none {
+        display: none;
+    }
+
+    .abouthome-link {
+        display: inline;
+    }
+}
+
 /* 1.) Mobile devices (portrait and landscape) */
 @media (max-width: 480px) {
 
                                                         /* ---------- Show Page: -------------- */
+
+    /* Navbar Adjustment */
+    /* Show "About Us" link only on small screens */
+    .abouthome-link {
+       display: none;
+    }
+
     /* 1.a Card. */
     .showPage {
         width: 90vw;
@@ -227,14 +245,12 @@ body{
     }
 
     /* Contact Us Form */
-    .formContainer .name, .contact, .contactAndQuery{
-        display: inline;
+    .formContainer .name, .formContainer .contact, .formContainer .contactAndQuery{
+        display: inline; 
     }
-    .name div, .contact div, .contactAndQuery .contactway, .contactAndQuery .urgency{
-        flex: 1;
-        flex-direction: row;
-        /* box-sizing: border-box; */
-        /* padding: 1rem; */
+
+    .formContainer .subject {
+        width: 70%; /* Full width on small screens */
     }
 
   }
@@ -284,6 +300,13 @@ body{
         height: 50vh;
         width: 40vw;
     }
+
+
+    /* Contact Us Form */
+    .formContainer .firstName, .formContainer .email, .formContainer{
+        margin-right: 1rem;
+    }
+
 
   }
 
@@ -341,7 +364,10 @@ body{
         width: 30vw;
     }
 
-    /* Form: */
+    /* Contact Us Form: */
+    .formContainer .firstName, .formContainer .email, .formContainer{
+        margin-right: 1rem;
+    }
 
   }
 
@@ -405,6 +431,11 @@ body{
     .manualqr img{
         height: 60vh;
         width: 30vw;
+    }
+
+    /* Contact us form */
+    .formContainer .firstName, .formContainer .email, .formContainer{
+        margin-right: 1rem;
     }
   }
 
@@ -479,13 +510,7 @@ body{
     margin: 2rem 0;
 }
 
-.formContainer hr {
-    margin-left: -3rem !important;
-    color: black;
-    width: 49.5vw; /* Ensure it occupies the full width */
-    /* border: 0.01px solid #000; */
-     /* Optional: Adjust the border thickness and color */
-}
+
 .name, .contact, .contactAndQuery{
     display: flex;
 }
@@ -520,5 +545,3 @@ form .contactAndQuery .contactway div, form .contactAndQuery .urgency div{
 form input, form textarea{
     border: 0.5px solid rgb(171, 170, 170) !important;
 }
-
-
