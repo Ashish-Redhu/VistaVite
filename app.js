@@ -19,6 +19,7 @@ const User = require("./models/user.js"); // This is User model not route.
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const { constants } = require('buffer');
+const nodemailer = require('nodemailer');
 
 // Setting up an express app.
 const app = express();

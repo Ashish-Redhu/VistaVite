@@ -1,7 +1,7 @@
 <% layout("./layouts/boilerplate.ejs"); %>
 
 <div class="row mt-3">
-    <div class="col-6 offset-3">
+    <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
         <h1>Login</h1>
         <hr>
         <form action="/login" method="POST" style="margin-top: 2rem;" class="needs-validation" novalidate >
@@ -14,6 +14,7 @@
                 <input type="password" name="password" id="password" class="form-control" required>
             </div>
             <button class="btn btn-success">Login</button>
+            <div style="color: rgb(79, 144, 219); margin-left: 1rem;">Or</div>
             <p><a class="link-opacity-75" href="/signup">Don't have an account</a></p>
         </form>
     </div>

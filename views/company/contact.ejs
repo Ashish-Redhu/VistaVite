@@ -1,0 +1,83 @@
+<% layout("./layouts/boilerplate.ejs"); %>
+
+<div class="contactPage row">
+    <div class="formContainer col-md-8 col-lg-6 offset-md-2 offset-lg-3 mt-5 px-5">
+        <div class="formHeading">
+            <h1 style="font-weight: bold;">VistaVite Contact Form</h1>
+            <p>Please use this form to get in touch with us. We'll be happy to assist you with any inquiries or requests.</p>
+        </div>
+        <hr>
+        <h4 style="font-weight: 700;">Your Information</h4>
+        <form action="/company/contact" method="POST" style="margin-top: 2rem;" class="needs-validation" novalidate>
+            <div class="fullname">
+                <div class="label">
+                    <label class="form-label">Full Name</label>
+                </div>
+                <div class="name">
+                    <div class="firstName form-group mb-3"  style="padding-right: 1rem;">
+                        <input type="text" name="firstname" id="firstname" class="form-control" required>
+                        <label for="firstname" class="form-sub-label">First Name</label>
+                    </div>
+                    <div class="lastName form-group mb-3">
+                        <input type="text" name="lastname" id="lastname" class="form-control">
+                        <label for="lastname" class="form-label">Last Name</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact">
+                <div class="email form-group mb-3" style="padding-right: 1rem;">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                    <p style="font-size: 12px;">example@example.com</p>
+                </div>
+                <div class="phone form-group mb-3">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" pattern="\d{10}" required>
+                    <p style="font-size: 12px;">Please enter a valid number.</p>
+                </div>
+            </div>
+            
+            <div class="subject form-group mb-3">
+                <label for="subject" class="form-label">Subject of Inquiry</label>
+                <input type="text" name="subject" id="subject" class="form-control" required>
+            </div>
+            <div class="description form-group mb-3">
+                <label for="description" class="form-label">Message</label>
+                <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
+            </div>
+            <div class="contactAndQuery">
+                <div class="contactway form-group mb-3">
+                    <label class="form-label">Preferred Contact Method</label>
+                    <div>
+                        <input type="radio" name="contactMethod" id="emailContact" value="email" required>
+                        <label for="emailContact">Email</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="contactMethod" id="phoneContact" value="phone" required>
+                        <label for="phoneContact">Phone call</label>
+                    </div>                 
+                </div>
+                <div class="urgency form-group mb-3">
+                    <label class="form-label">Urgency of Inquiry</label>
+                    <div>
+                        <input type="radio" name="urgency" id="urgent" value="urgent" required>
+                        <label for="urgent">Urgent</label>
+                    </div> 
+                    <div>
+                        <input type="radio" name="urgency" id="normal" value="normal" required>
+                        <label for="normal">Normal</label>
+                    </div> 
+                    <div>
+                        <input type="radio" name="urgency" id="notUrgent" value="notUrgent" required>
+                        <label for="norurgent">Nor Urgent</label>
+                    </div> 
+                </div>
+            </div>
+            <hr>
+            <div class="buttonContainer">
+                <button class="btn btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -38,7 +38,8 @@ module.exports.renderLoginForm = (req, res)=>{
 //4.) Login
 module.exports.logIn = async(req, res)=>{
     req.flash("success", "Welcome back to Vista-Vite !");
-    let redirectUrl = res.locals.redirectUrl || "/listings";
+    // let redirectUrl = res.locals.redirectUrl || "/listings";
+    let redirectUrl = "/listings";
     res.redirect(redirectUrl);
 }
 

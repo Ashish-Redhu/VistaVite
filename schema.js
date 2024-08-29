@@ -24,7 +24,24 @@ const reviewSchema = Joi.object({
   }).required(),
 })
 
-module.exports = {listingSchema,reviewSchema};
+// Contact Form Schema
+const contactSchema = Joi.object({
+  firstname: Joi.string().required(),
+  lastname: Joi.string().allow('', null), // Optional field
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string()
+    .pattern(/^\d{10}$/)
+    .required()
+    .messages({
+      "string.pattern.base": "Phone number must be a valid 10-digit number."
+    }),
+  subject: Joi.string().required(),
+  description: Joi.string().required(),
+  contactMethod: Joi.string().valid('email', 'phone').required(),
+  urgency: Joi.string().valid('urgent', 'normal', 'notUrgent').required(),
+});
+
+module.exports = {listingSchema,reviewSchema, contactSchema};
 
 // We can exports in some other way as well. like "module.exports.reviewSchema" to directly export, then no need of this last line "module.exports = {listingSchema,reviewSchema};"
 

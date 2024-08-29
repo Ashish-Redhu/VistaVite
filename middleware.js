@@ -1,5 +1,5 @@
 const Listing = require("./models/listing.js");
-const { listingSchema, reviewSchema} = require("./schema.js");
+const { listingSchema, reviewSchema, contactSchema} = require("./schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 const Review = require("./models/review.js");
 
@@ -82,7 +82,15 @@ module.exports.isAuthor = async (req, res, next)=>{
     next();
 }
 
-
-
+// Middleware to validate ContactForm.
+module.exports.validateContactForm = (req, res, next)=>{
+    const result = contactSchema.validate(req.body);  // Joi data-validation: 
+        console.log(result);
+        if(result.error){
+                throw new ExpressError(400, result.error);
+        }
+        else
+        {next();}
+}
 
 
